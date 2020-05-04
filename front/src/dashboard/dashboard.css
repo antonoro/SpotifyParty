@@ -1,0 +1,24 @@
+#mygroups {
+    background-color: whitesmoke;
+    height: 92vh;
+    font-family: 'Playfair Display', serif;
+    padding-top: 5vh;
+}
+
+.nowplaying {
+    background-color: whitesmoke;
+    height: 52vh;
+    padding-top: 5vh;
+    padding-left: 5vh;
+}
+.nextup {
+    background-color: whitesmoke;
+    height: 40vh;
+    padding-top: 5vh;
+    padding-left: 5vh;
+}
+#chat {
+    background-color: whitesmoke;
+    padding-top: 5vh;
+    height: 92vh;
+}
