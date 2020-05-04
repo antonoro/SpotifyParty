@@ -9,18 +9,28 @@ class Dashboard extends React.Component{
         this.state = {
             loggedIn: true,
             item: null,
+            authToken: props.token,
+            refreshToggled: false,
         };
     }
 
     componentDidMount(){
-        if(this.props.token !== null)
+        if(this.props.token !== undefined)
         {
-            this.getAccountInfo(this.props.token);
-        }
-        
+            this.getMusicInfo(this.props.token);
+        }  
     }
 
-    getAccountInfo(token) {
+    componentDidUpdate(){
+        if(this.state.refreshToggled)
+        {
+            console.log('Refreshed');
+            this.getMusicInfo(this.state.authToken);
+        }
+            
+    }
+
+    getMusicInfo = (token) => {
         $.ajax( 
         {
             url: "https://api.spotify.com/v1/me/player",
@@ -33,6 +43,7 @@ class Dashboard extends React.Component{
                 {
                     this.setState({
                         item: data.item,
+                        refreshToggled: false,
                     });
                 }
                 
@@ -61,10 +72,13 @@ class Dashboard extends React.Component{
                                     <h2>Now Playing: {this.state.item.name}</h2>
                                     <h4>Artist: {this.state.item.artists[0].name}</h4>
                                     <h4>Album: {this.state.item.album.name}</h4>
+                                    <button className="btn btn-secondary" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
                                 </div>
                                 <div className="col">
                                     <img src={`${this.state.item.album.images[1].url}`} alt="Cover"></img>
+                                    
                                 </div>
+                                
                             </div>
                             
                             

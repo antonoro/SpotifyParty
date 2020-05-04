@@ -32,7 +32,7 @@ class TopHeader extends React.Component{
 
     componentDidMount() {
         
-        console.log("URI", this.state.redirect_uri);
+        console.log("URI", redirect_uri);
         let _token = hash.access_token;
         if (_token) {
             // Set token
