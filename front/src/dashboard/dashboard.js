@@ -12,6 +12,8 @@ class Dashboard extends React.Component{
             authToken: props.token,
             refreshToggled: false,
             playbackCommandtrigger: false,
+            changePlaybackTrigger: false,
+            changePlayback: null,
             playback: null,
         };
     }
@@ -44,7 +46,21 @@ class Dashboard extends React.Component{
                 this.playpausePlayback(this.state.authToken, "pause");
             } 
         }
-            
+
+        if(this.state.changePlaybackTrigger)
+        {
+            console.log("Command:", this.state.changePlayback);
+            if(this.state.changePlayback === 2)
+            {
+                console.log('next song');
+                this.changePlayback(this.state.authToken, "next");
+            }
+            else if(this.state.changePlayback === 1)
+            {
+                console.log('previous song');
+                this.changePlayback(this.state.authToken, "previous");
+            }
+        }   
     }
 
     getMusicInfo = (token) => {
@@ -61,7 +77,7 @@ class Dashboard extends React.Component{
                     this.setState({
                         item: data.item,
                         refreshToggled: false,
-                        playback: true,
+                        playback: data.is_playing,
                     });
                 }
                 
@@ -83,6 +99,22 @@ class Dashboard extends React.Component{
                 this.setState({playbackCommandtrigger: false});
             }
             
+        });
+        
+    }
+
+    changePlayback = (token, action) => {
+        $.ajax( 
+        {
+            url: "https://api.spotify.com/v1/me/player/"+action,
+            type: "POST",
+            beforeSend: (xhr) => {
+                xhr.setRequestHeader("Authorization", "Bearer " + token);
+            },
+            success: () => {
+                console.log("Playback changed to: "+this.state.changePlayback+" song");
+                this.setState({changePlaybackTrigger: false, refreshToggled: true});
+            }
             
         });
         
@@ -100,32 +132,33 @@ class Dashboard extends React.Component{
                 </div>
                 <div className="col-7">
                     <div className="row nowplaying border">
-                        { this.state.item === null ?
-                            <h2>Now Playing: [Nothing is playing]</h2>
-                        :
-                            <div className="row">
-                                <div className="col">
-                                    <h2>Now Playing: {this.state.item.name}</h2>
-                                    <h4>Artist: {this.state.item.artists[0].name}</h4>
-                                    <h4>Album: {this.state.item.album.name}</h4>
+                        <div className="col-6">
+                            { this.state.item === null ?
+                                <h2>Now Playing: [Nothing is playing]</h2>
+                            : 
+                                <div>
+                                    <h2>Now Playing:</h2>
+                                    <h5>{this.state.item.name}</h5>
+                                    <h6>Artist: {this.state.item.artists[0].name}</h6>
+                                    <h6>Album: {this.state.item.album.name}</h6>
+                                    <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTrigger: true, changePlayback: 1})}>Previous</button>
                                     <button className="btn btn-secondary" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
                                     { this.state.playback ?
-                                        <button className="btn btn-secondary" onClick={() => this.setState({playbackCommandtrigger: true, playback: false})}>Pause</button>
+                                        <button className="btn btn-danger" onClick={() => this.setState({playbackCommandtrigger: true, playback: false})}>Pause</button>
                                     :
-                                        <button className="btn btn-secondary" onClick={() => this.setState({playbackCommandtrigger: true, playback: true})}>Play</button>
+                                        <button className="btn btn-success" onClick={() => this.setState({playbackCommandtrigger: true, playback: true})}>Play</button>
                                     }
+                                    <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTrigger: true, changePlayback: 2})}>Next</button>    
                                 </div>
-                                <div className="col">
-                                    <img src={`${this.state.item.album.images[1].url}`} alt="Cover"></img>
-                                    
-                                </div>
-                                
-                            </div>
-                            
-                            
-                        }
-                        
-                        
+                            }
+                        </div>
+                        <div className="col-6">
+                            { this.state.item === null ?
+                                <h2></h2>
+                            :
+                                <img src={`${this.state.item.album.images[1].url}`} alt="Cover"></img> 
+                            }
+                        </div>
                         
                     </div>
                     <div className="row nextup border">
