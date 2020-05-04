@@ -11,6 +11,8 @@ class Dashboard extends React.Component{
             item: null,
             authToken: props.token,
             refreshToggled: false,
+            playbackCommandtrigger: false,
+            playback: null,
         };
     }
 
@@ -26,6 +28,21 @@ class Dashboard extends React.Component{
         {
             console.log('Refreshed');
             this.getMusicInfo(this.state.authToken);
+        }
+
+        if(this.state.playbackCommandtrigger)
+        {
+            console.log('Triggered Play/pause');
+            if(this.state.playback === true)
+            {
+                console.log('play');
+                this.playpausePlayback(this.state.authToken, "play");
+            }
+            else
+            {
+                console.log('pause');
+                this.playpausePlayback(this.state.authToken, "pause");
+            } 
         }
             
     }
@@ -44,6 +61,7 @@ class Dashboard extends React.Component{
                     this.setState({
                         item: data.item,
                         refreshToggled: false,
+                        playback: true,
                     });
                 }
                 
@@ -52,6 +70,24 @@ class Dashboard extends React.Component{
         
     }
     
+    playpausePlayback = (token, action) => {
+        $.ajax( 
+        {
+            url: "https://api.spotify.com/v1/me/player/"+action,
+            type: "PUT",
+            beforeSend: (xhr) => {
+                xhr.setRequestHeader("Authorization", "Bearer " + token);
+            },
+            success: () => {
+                console.log("Playback changed to: ", this.state.playback);
+                this.setState({playbackCommandtrigger: false});
+            }
+            
+            
+        });
+        
+    }
+
     render(){
         
         return (
@@ -73,6 +109,11 @@ class Dashboard extends React.Component{
                                     <h4>Artist: {this.state.item.artists[0].name}</h4>
                                     <h4>Album: {this.state.item.album.name}</h4>
                                     <button className="btn btn-secondary" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
+                                    { this.state.playback ?
+                                        <button className="btn btn-secondary" onClick={() => this.setState({playbackCommandtrigger: true, playback: false})}>Pause</button>
+                                    :
+                                        <button className="btn btn-secondary" onClick={() => this.setState({playbackCommandtrigger: true, playback: true})}>Play</button>
+                                    }
                                 </div>
                                 <div className="col">
                                     <img src={`${this.state.item.album.images[1].url}`} alt="Cover"></img>
