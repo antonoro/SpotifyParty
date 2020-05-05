@@ -1,5 +1,5 @@
 import React from 'react';
-import * as $ from "jquery";
+
 import './dashboard.css'
 
 class Dashboard extends React.Component{
@@ -19,7 +19,6 @@ class Dashboard extends React.Component{
     }
 
     componentDidMount(){
-        
     }
 
     componentDidUpdate(){
@@ -72,8 +71,8 @@ class Dashboard extends React.Component{
         fetch("/getplayback")
         .then(res => res.json()
         .then(res => {
-            
-            if(res !== null)
+            console.log("res is:" , res);
+            if(res !== null && res!== undefined)
             {
                 console.log("Fetched!");
                 this.setState({
@@ -136,8 +135,11 @@ class Dashboard extends React.Component{
                 <div className="col-7">
                     <div className="row nowplaying border">
                         <div className="col-6">
-                            { this.state.item === null ?
-                                <h2>Now Playing: [Nothing is playing]</h2>
+                            { (this.state.item === null || this.state.item === undefined) ?
+                                <div>    
+                                    <h2>Now Playing: [Nothing is playing]</h2>
+                                    <button className="btn btn-warning" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
+                                </div>
                             : 
                                 <div>
                                     <h2>Now Playing:</h2>
@@ -156,11 +158,15 @@ class Dashboard extends React.Component{
                             }
                         </div>
                         <div className="col-6">
-                            { this.state.item === null ?
+                            { (this.state.item === null || this.state.item === undefined) ?
                                 <h2></h2>
                             :
-                                <img src={`${this.state.item.album.images[1].url}`} alt="Cover"></img> 
+                                <div>
+                                    <img src={`${this.state.item.album.images[1].url}`} alt="Cover"></img> 
+                                    
+                                </div>
                             }
+                            
                         </div>
                         
                     </div>

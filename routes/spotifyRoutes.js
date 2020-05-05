@@ -64,7 +64,10 @@ router.get('/getplayback', (req, res) => {
         console.log("loggedIn, sending playback info");
         spotifyAPI.getMyCurrentPlaybackState()
         .then(data => {
-            console.log("Playback is: ", data.body.item.name);
+            if(data !== undefined)
+            {
+                console.log("Playback is: ", data);
+            }
             res.json(data.body);
         });
     }
