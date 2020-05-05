@@ -15,6 +15,7 @@ app.use(require('body-parser').json());
 app.use(express.static(path.join(__dirname, 'front/build')));
 
 app.use('/', indexRouter);
+app.use('/', SpotifyRouter);
 
 
 module.exports = app;

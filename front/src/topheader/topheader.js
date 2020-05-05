@@ -20,51 +20,21 @@ const scopes = [
 class TopHeader extends React.Component{
     
     constructor(props){
-        super(props);
+        super();
         
         this.state = {
-            loggedIn: false,
-            token: null,
-            email: null,
-            username: null,
+            user: null,
         };
     }
 
     componentDidMount() {
         
-        console.log("URI", redirect_uri);
-        let _token = hash.access_token;
-        if (_token) {
-            // Set token
-            console.log("token is: ", _token);
-            this.props.getAccessToken(_token);
-            this.getAccountInfo(_token);
-            this.setState({
-                loggedIn: true,
-            });
-        }
-        else{
-            this.setState({
-                loggedIn: false,
-            });
-        }
     }
 
-    getAccountInfo(token) {
-        $.ajax( 
-        {
-            url: "https://api.spotify.com/v1/me",
-            type: "GET",
-            beforeSend: (xhr) => {
-                xhr.setRequestHeader("Authorization", "Bearer " + token);
-            },
-            success: (data) => {
-                this.setState({
-                    username: data.display_name
-                });
-                console.log(this.state.email);
-            }
-        });
+    componentDidUpdate() {
+        
+        if(this.props.user !== this.state.user)
+        {this.setState({user: this.props.user});}
         
     }
 
@@ -80,15 +50,16 @@ class TopHeader extends React.Component{
                         <Nav.Link href="#home">Home</Nav.Link>
                         <Nav.Link href="#link">Link</Nav.Link>
                     </Nav>
-                    { this.state.loggedIn === false ?
+                    { this.state.user === null ?
                     <Nav className="ml-auto logintag">
-                        <Nav.Link href=
-                        {`${authEndpoint}?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scopes.join("%20")}&response_type=token&show_dialog=true`}>Login with Spotify</Nav.Link>
+                        <Nav.Link href="/login">Login with Spotify</Nav.Link>
                     </Nav>
                     :
                     <Nav className="ml-auto">
                         <NavDropdown className="myaccountTag" title="My Account" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="#">Hello, {this.state.username}</NavDropdown.Item>
+
+                            <NavDropdown.Item href="#">Hello, {this.state.user}</NavDropdown.Item>
+
                             <NavDropdown.Item href="#">Preferences</NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item href="#">Log out</NavDropdown.Item>

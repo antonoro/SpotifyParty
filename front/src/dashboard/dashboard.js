@@ -7,9 +7,9 @@ class Dashboard extends React.Component{
     constructor(props){
         super();
         this.state = {
-            loggedIn: true,
+            user: null,
+            loggedIn: false,
             item: null,
-            authToken: props.token,
             refreshToggled: false,
             playbackCommandtrigger: false,
             changePlaybackTrigger: false,
@@ -19,17 +19,21 @@ class Dashboard extends React.Component{
     }
 
     componentDidMount(){
-        if(this.props.token !== undefined)
-        {
-            this.getMusicInfo(this.props.token);
-        }  
+        
     }
 
     componentDidUpdate(){
+
+        if(this.props.user !== this.state.user) // when user changes
+        {
+            this.setState({user: this.props.user, loggedIn: true});
+            this.getMusicInfo();
+        }
+
         if(this.state.refreshToggled)
         {
             console.log('Refreshed');
-            this.getMusicInfo(this.state.authToken);
+            this.getMusicInfo();
         }
 
         if(this.state.playbackCommandtrigger)
@@ -38,12 +42,12 @@ class Dashboard extends React.Component{
             if(this.state.playback === true)
             {
                 console.log('play');
-                this.playpausePlayback(this.state.authToken, "play");
+                this.playpausePlayback("play");
             }
             else
             {
                 console.log('pause');
-                this.playpausePlayback(this.state.authToken, "pause");
+                this.playpausePlayback("pause");
             } 
         }
 
@@ -53,70 +57,69 @@ class Dashboard extends React.Component{
             if(this.state.changePlayback === 2)
             {
                 console.log('next song');
-                this.changePlayback(this.state.authToken, "next");
+                this.changePlayback("next");
             }
             else if(this.state.changePlayback === 1)
             {
                 console.log('previous song');
-                this.changePlayback(this.state.authToken, "previous");
+                this.changePlayback("previous");
             }
         }   
     }
 
-    getMusicInfo = (token) => {
-        $.ajax( 
-        {
-            url: "https://api.spotify.com/v1/me/player",
-            type: "GET",
-            beforeSend: (xhr) => {
-                xhr.setRequestHeader("Authorization", "Bearer " + token);
-            },
-            success: (data) => {
-                if(data !== undefined)
-                {
-                    this.setState({
-                        item: data.item,
-                        refreshToggled: false,
-                        playback: data.is_playing,
-                    });
-                }
-                
+    getMusicInfo = () => {
+        console.log("Fetching playback info...");
+        fetch("/getplayback")
+        .then(res => res.json()
+        .then(res => {
+            
+            if(res !== null)
+            {
+                console.log("Fetched!");
+                this.setState({
+                    item: res.item,
+                    refreshToggled: false,
+                    playback: res.is_playing,
+                });
             }
-        });
-        
+        })
+        );
     }
     
-    playpausePlayback = (token, action) => {
-        $.ajax( 
-        {
-            url: "https://api.spotify.com/v1/me/player/"+action,
-            type: "PUT",
-            beforeSend: (xhr) => {
-                xhr.setRequestHeader("Authorization", "Bearer " + token);
-            },
-            success: () => {
-                console.log("Playback changed to: ", this.state.playback);
-                this.setState({playbackCommandtrigger: false});
-            }
+    playpausePlayback = (action) => {
+        console.log("Playing/pausing playback...");
+        fetch("/"+action)
+        .then(res => res.json()
+        .then(res => {
             
-        });
+            if(res !== null)
+            {
+                console.log("Done!: ", res);
+                this.setState({
+                    playbackCommandtrigger: false
+                });
+            }
+        })
+        );
         
     }
 
-    changePlayback = (token, action) => {
-        $.ajax( 
-        {
-            url: "https://api.spotify.com/v1/me/player/"+action,
-            type: "POST",
-            beforeSend: (xhr) => {
-                xhr.setRequestHeader("Authorization", "Bearer " + token);
-            },
-            success: () => {
-                console.log("Playback changed to: "+this.state.changePlayback+" song");
-                this.setState({changePlaybackTrigger: false, refreshToggled: true});
-            }
+    changePlayback = (action) => {
+        console.log("Changing playback...");
+        fetch("/"+action)
+        .then(res => res.json()
+        .then(res => {
             
-        });
+            if(res !== null)
+            {
+                console.log("Fetched!: ", res);
+                this.setState({
+                    refreshToggled: true,
+                    changePlaybackTrigger: false,
+                });
+            }
+        })
+        );
         
     }
 
@@ -142,7 +145,7 @@ class Dashboard extends React.Component{
                                     <h6>Artist: {this.state.item.artists[0].name}</h6>
                                     <h6>Album: {this.state.item.album.name}</h6>
                                     <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTrigger: true, changePlayback: 1})}>Previous</button>
-                                    <button className="btn btn-secondary" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
+                                    <button className="btn btn-warning" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
                                     { this.state.playback ?
                                         <button className="btn btn-danger" onClick={() => this.setState({playbackCommandtrigger: true, playback: false})}>Pause</button>
                                     :
