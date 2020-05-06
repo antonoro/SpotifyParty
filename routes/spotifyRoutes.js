@@ -64,9 +64,9 @@ router.get('/getplayback', (req, res) => {
         console.log("loggedIn, sending playback info");
         spotifyAPI.getMyCurrentPlaybackState()
         .then(data => {
-            if(data !== undefined)
+            if(data.body.item !== undefined)
             {
-                console.log("Playback is: ", data);
+                console.log("Playback is: ", data.body.item.name);
             }
             res.json(data.body);
         });
@@ -83,9 +83,16 @@ router.get('/next', (req,res) =>{
     {
         console.log("loggedIn, fetching next song");
         spotifyAPI.skipToNext()
-        .then(() => {
-            console.log("Skipped to next");
-            res.json("Next");
+        .then((data) => {
+            
+            if(data.statusCode === 204)
+            {
+                console.log("Skipped to next", data);
+                res.json("Next");
+            }
+            else{
+                res.json(null);
+            }
         })
     }
     else{
@@ -100,9 +107,15 @@ router.get('/previous', (req,res) =>{
     {
         console.log("loggedIn, fetching previous song");
         spotifyAPI.skipToPrevious()
-        .then(() => {
-            console.log("Skipped to previous");
-            res.json("Previous");
+        .then(data => {
+            if(data.statusCode === 204)
+            {
+                console.log("Skipped to previous");
+                res.json("Previous");
+            }
+            else{
+                res.json(null);
+            }
         })
     }
     else{
@@ -144,6 +157,45 @@ router.get('/pause', (req,res) =>{
         res.json(null);
     }
 });
+
+router.get('/playdoowop', (req,res) =>{
+    console.log("Doo wop received");
+    if(loggedIn === true)
+    {
+        spotifyAPI.play({uris: ["spotify:track:17RcMFZHPrjusBlklhSKou"]})
+        .then(() => {
+            console.log("Doo Wop playing");
+            res.redirect("/");
+        }).catch(err => {console.log(err)});
+        
+    }
+    else{
+        console.log("Not loggedIn, giving back null");
+        res.json(null);
+    }
+});
+
+router.get('/refreshaccesstoken', (req,res) =>{
+    console.log("Refreshing access token");
+    if(loggedIn === true)
+    {
+        console.log("loggedIn, refreshing");
+        spotifyAPI.refreshAccessToken()
+        .then(data => {
+            console.log('The old access token is ' + spotifyAPI.access_token);
+            console.log('The refresh token is ' + spotifyAPI.refresh_token);
+            spotifyAPI.setAccessToken(data.body['access_token']);
+            console.log('The new access token is ' + data.body['access_token']);
+            console.log("Refreshed");
+            res.redirect("/");
+        });
+    }
+    else{
+        console.log("Not loggedIn, giving back null");
+        res.json(null);
+    }
+});
+
 
 
 module.exports = router;

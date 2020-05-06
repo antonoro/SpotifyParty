@@ -113,9 +113,16 @@ class Dashboard extends React.Component{
             {
                 console.log("Fetched!: ", res);
                 this.setState({
-                    refreshToggled: true,
                     changePlaybackTrigger: false,
                 });
+                console.log("Waiting for spotify to change song...");
+                setTimeout( () => {
+                    this.setState({refreshToggled: true});
+                }, 1000); // Not good practice, should find a way to coordinate with spotify, but can't predict when it'll actually have changed the song
+                    
+            }
+            else{
+                alert("Error from spotify");
             }
         })
         );
