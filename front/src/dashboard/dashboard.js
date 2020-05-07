@@ -1,5 +1,6 @@
 import React from 'react';
-
+import MyGroups from './mygroups/mygroups.js';
+import Nextup from './nextup/nextup.js';
 import './dashboard.css'
 
 class Dashboard extends React.Component{
@@ -15,6 +16,7 @@ class Dashboard extends React.Component{
             changePlaybackTrigger: false,
             changePlayback: null,
             playback: null,
+            playlistDisplay: null,
         };
     }
 
@@ -23,7 +25,7 @@ class Dashboard extends React.Component{
 
     componentDidUpdate(){
 
-        if(this.props.user !== this.state.user) // when user changes
+        if(this.props.user !== this.state.user && this.props.user !== null) // when user changes
         {
             this.setState({user: this.props.user, loggedIn: true});
             this.getMusicInfo();
@@ -129,6 +131,11 @@ class Dashboard extends React.Component{
         
     }
 
+    getSelectedPlaylist = (playlist) => {
+        console.log("Got selected playlist in dashboard: ", playlist);
+        this.setState({playlistDisplay: playlist});
+    }
+
     render(){
         
         return (
@@ -136,6 +143,7 @@ class Dashboard extends React.Component{
                 <div id="mygroups" className="col-2 border">
                     <div className="row justify-content-center">
                         <h2>My groups</h2>
+                        <MyGroups user={this.state.user} getplaylist={this.getSelectedPlaylist}/>
                     </div>
                     
                 </div>
@@ -178,7 +186,8 @@ class Dashboard extends React.Component{
                         
                     </div>
                     <div className="row nextup border">
-                        <h2>Next up:</h2>
+                    
+                        <Nextup playlist={this.state.playlistDisplay} />
                     </div>
                     
                 </div>

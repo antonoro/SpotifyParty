@@ -32,9 +32,9 @@ class App extends React.Component {
       <div className="App">
 
           <TopHeader user={this.state.userState}/>
-          
+        <div className="container-fluid">  
           <Dashboard user={this.state.userState}/>
-          
+        </div>
         
         
 

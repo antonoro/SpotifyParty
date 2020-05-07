@@ -3,10 +3,12 @@ const router = express.Router();
 
 const dotenv = require('dotenv').config();
 
+const mu = require("../db/MongoUtils.js");
 
 const SpotifyWebAPI = require('spotify-web-api-node');
 
 var loggedIn = false;
+var myemail = null;
 
 const spotifyAPI = new SpotifyWebAPI({
     clientId: process.env.CLIENT_ID,
@@ -48,6 +50,7 @@ router.get('/getUser', (req,res) => {
         console.log("loggedIn, sending username");
         spotifyAPI.getMe()
         .then(data => {
+            myemail=data.body.email;
             res.json(data.body.display_name);
         }).catch(err => {console.log('error getting user info from spotify')});
     }
@@ -87,7 +90,7 @@ router.get('/next', (req,res) =>{
             
             if(data.statusCode === 204)
             {
-                console.log("Skipped to next", data);
+                console.log("Skipped to next");
                 res.json("Next");
             }
             else{
@@ -175,6 +178,22 @@ router.get('/playdoowop', (req,res) =>{
     }
 });
 
+router.post('/gettracksinfo', (req, res) =>{
+    console.log("Get track info received");
+    if(loggedIn === true)
+    {
+        spotifyAPI.getTracks(req.body)
+        .then((data) => {
+            console.log("Got tracks in back:", data.body.tracks);
+            res.json(data.body.tracks);
+        });
+    }
+    else{
+        console.log("Not loggedIn, giving back null");
+        res.json(null);
+    }
+});
+
 router.get('/refreshaccesstoken', (req,res) =>{
     console.log("Refreshing access token");
     if(loggedIn === true)
@@ -196,6 +215,16 @@ router.get('/refreshaccesstoken', (req,res) =>{
     }
 });
 
+router.get('/getallgroups', (req,res) =>{
+    console.log("Getting group info...");
+    if(loggedIn === true)
+    {
+        mu.getGroupsData(myemail)
+        .then(arraydata =>{
+            res.json(arraydata);
+        });
+    }
+});
 
 
 module.exports = router;
