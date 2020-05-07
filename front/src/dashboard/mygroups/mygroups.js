@@ -1,6 +1,6 @@
 import React from 'react';
 import './mygroups.css';
-import {Accordion, Card, ToggleButtonGroup, ToggleButton} from 'react-bootstrap';
+import {Accordion, Card, ToggleButtonGroup, ToggleButton, Form, Button} from 'react-bootstrap';
 
 class MyGroups extends React.Component{
 
@@ -44,10 +44,28 @@ class MyGroups extends React.Component{
     render() {
 
         return (
-            <div>
+            <div className="fullsize">
                 { this.state.user !== null ?
-                    <div>
-                        <button className="btn btn-outline-success">Add new group</button>
+                    <div className="fullsize">
+                        
+                        <Accordion>
+                            <Accordion.Toggle as={Card.Header} eventKey={1}>
+                                Add new group
+                            </Accordion.Toggle>
+                            <Accordion.Collapse eventKey={1}>
+                                <Card.Body>
+                                    <Form>
+                                        <Form.Group>
+                                        <Form.Control type="text" placeholder="Enter name" />
+                                        </Form.Group>
+                                        <Button variant="primary" type="submit">
+                                            Add
+                                        </Button>
+                                    </Form>
+                                </Card.Body>
+                            </Accordion.Collapse>
+                        </Accordion>
+
                         { this.state.groups !== null ?
                             <Accordion defaultActiveKey="0">
                                 {   this.state.groups.map((group, index) =>
@@ -71,9 +89,9 @@ class MyGroups extends React.Component{
                                                     <ToggleButtonGroup type="radio" name="playlists" vertical onChange={this.handleSelectedPlaylist}>
                                                         {group.playlists.map((playlist, i) => {
                                                             return(
-                                                                <ToggleButton value={this.state.groups[index].playlists[i]}>
-                                                                {playlist[0]}
-                                                                </ToggleButton>
+            
+                                                                <ToggleButton value={this.state.groups[index].playlists[i]}>{playlist[0]}</ToggleButton>
+                                                                
                                                             )
                                                         })
                                                         }
@@ -94,7 +112,7 @@ class MyGroups extends React.Component{
                             
                     </div>
                     :
-                    <label>Not logged in</label>
+                    <h4>Not logged in</h4>
                 }
                     
                 

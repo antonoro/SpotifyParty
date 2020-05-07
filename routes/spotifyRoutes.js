@@ -86,6 +86,16 @@ router.get('/next', (req,res) =>{
     {
         console.log("loggedIn, fetching next song");
         spotifyAPI.skipToNext()
+        .catch((err) => 
+        {
+            console.log(err);
+            if(err.statusCode === 500)
+            {
+                console.log("Error from Spotify");
+                res.json(null);
+            }
+            
+        })
         .then((data) => {
             
             if(data.statusCode === 204)
@@ -93,6 +103,7 @@ router.get('/next', (req,res) =>{
                 console.log("Skipped to next");
                 res.json("Next");
             }
+            
             else{
                 res.json(null);
             }
@@ -110,6 +121,16 @@ router.get('/previous', (req,res) =>{
     {
         console.log("loggedIn, fetching previous song");
         spotifyAPI.skipToPrevious()
+        .catch((err) => 
+        {
+            console.log(err);
+            if(err.statusCode === 500)
+            {
+                console.log("Error from Spotify");
+                res.json(null);
+            }
+            
+        })
         .then(data => {
             if(data.statusCode === 204)
             {

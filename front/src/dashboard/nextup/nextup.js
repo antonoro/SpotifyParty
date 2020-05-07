@@ -10,6 +10,7 @@ class Nextup extends React.Component{
             playlist: null,
             playlistname: null,
             tracklist: [],
+            nextup: [],
         }
     }
 
@@ -39,10 +40,10 @@ class Nextup extends React.Component{
             console.log("Fetched tracks info:", res);
             var tracks = [];
             res.map((track, i) => {
-                tracks[i] = [track.name, track.artists[0].name, track.album.name, `${(Math.floor(track.duration_ms/60000)).toFixed(0)}:${((track.duration_ms/1000)%60).toFixed(0)}`];
+                tracks[i] = [track.name, track.artists[0].name, track.album.name, `${(Math.floor(track.duration_ms/60000)).toFixed(0)}:${((track.duration_ms/1000)%60).toFixed(0)}`, track.uri];
             });
             console.log("Tracks:", tracks);
-            this.setState({tracklist: tracks});
+            this.setState({tracklist: tracks, nextup: tracks[0]});
         }));
         
     } 
@@ -50,11 +51,12 @@ class Nextup extends React.Component{
     render() {
 
         return (
-            <div>
-                
+            <div className="row nextupAddsong border">
+                <div className="col-6 border-right">
                 { this.state.playlist !== null ?
-                    <div>
-                        <h2>Playlist name: {this.state.playlist[0]}</h2>
+                    <div className="nextup">
+                        <h3>Next up: {this.state.nextup[0]} ({this.state.nextup[1]})</h3>
+                        <label>Playlist name: {this.state.playlist[0]}</label>
                         <Table striped border>
                             <thead>
                                 <th>#</th>
@@ -76,12 +78,15 @@ class Nextup extends React.Component{
                             }
                             </tbody>
                         </Table>
-                        <label>Next up:</label>
+                        
                     </div>
                 :
-                    <h2>[No playlist selected]</h2>
+                    <h2 className="nextup">[No playlist selected]</h2>
                 }
-                
+                </div>
+                <div className="col-6 ">
+                    <h2 div className="nextup">Add song to playlist</h2>
+                </div>
                 
             </div>
         );

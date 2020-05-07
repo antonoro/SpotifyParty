@@ -7,16 +7,12 @@
 
 .nowplaying {
     background-color: whitesmoke;
+    font-family: 'Playfair Display', serif;
     height: 52vh;
     padding-top: 5vh;
-    padding-left: 5vh;
+    text-align: center;
 }
-.nextup {
-    background-color: whitesmoke;
-    height: 40vh;
-    padding-top: 5vh;
-    padding-left: 5vh;
-}
+
 #chat {
     background-color: whitesmoke;
     padding-top: 5vh;

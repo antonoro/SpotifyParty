@@ -13,7 +13,8 @@ class Dashboard extends React.Component{
             item: null,
             refreshToggled: false,
             playbackCommandtrigger: false,
-            changePlaybackTrigger: false,
+            changePlaybackTriggerNext: false,
+            changePlaybackTriggerPrevious: false,
             changePlayback: null,
             playback: null,
             playlistDisplay: null,
@@ -52,20 +53,17 @@ class Dashboard extends React.Component{
             } 
         }
 
-        if(this.state.changePlaybackTrigger)
+        if(this.state.changePlaybackTriggerNext)
         {
-            console.log("Command:", this.state.changePlayback);
-            if(this.state.changePlayback === 2)
-            {
-                console.log('next song');
-                this.changePlayback("next");
-            }
-            else if(this.state.changePlayback === 1)
-            {
-                console.log('previous song');
-                this.changePlayback("previous");
-            }
-        }   
+            console.log('next song');
+            this.changePlaybackNext();
+            
+        }
+        if(this.state.changePlaybackTriggerPrevious)
+        {   
+            console.log('previous song');
+            this.changePlaybackPrevious();
+        }
     }
 
     getMusicInfo = () => {
@@ -105,9 +103,9 @@ class Dashboard extends React.Component{
         
     }
 
-    changePlayback = (action) => {
+    changePlaybackNext = () => {
         console.log("Changing playback...");
-        fetch("/"+action)
+        fetch("/next")
         .then(res => res.json()
         .then(res => {
             
@@ -115,7 +113,33 @@ class Dashboard extends React.Component{
             {
                 console.log("Fetched!: ", res);
                 this.setState({
-                    changePlaybackTrigger: false,
+                    changePlaybackTriggerNext: false,
+                });
+                console.log("Waiting for spotify to change song...");
+                setTimeout( () => {
+                    this.setState({refreshToggled: true});
+                }, 1000); // Not good practice, should find a way to coordinate with spotify, but can't predict when it'll actually have changed the song
+                    
+            }
+            else{
+                alert("Error from spotify");
+            }
+        })
+        );
+        
+    }
+
+    changePlaybackPrevious = (action) => {
+        console.log("Changing playback...");
+        fetch("/previous")
+        .then(res => res.json()
+        .then(res => {
+            
+            if(res !== null)
+            {
+                console.log("Fetched!: ", res);
+                this.setState({
+                    changePlaybackTriggerPrevious: false,
                 });
                 console.log("Waiting for spotify to change song...");
                 setTimeout( () => {
@@ -161,14 +185,14 @@ class Dashboard extends React.Component{
                                     <h5>{this.state.item.name}</h5>
                                     <h6>Artist: {this.state.item.artists[0].name}</h6>
                                     <h6>Album: {this.state.item.album.name}</h6>
-                                    <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTrigger: true, changePlayback: 1})}>Previous</button>
+                                    <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTriggerPrevious: true})}>Previous</button>
                                     <button className="btn btn-warning" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
                                     { this.state.playback ?
                                         <button className="btn btn-danger" onClick={() => this.setState({playbackCommandtrigger: true, playback: false})}>Pause</button>
                                     :
                                         <button className="btn btn-success" onClick={() => this.setState({playbackCommandtrigger: true, playback: true})}>Play</button>
                                     }
-                                    <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTrigger: true, changePlayback: 2})}>Next</button>    
+                                    <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTriggerNext: true})}>Next</button>    
                                 </div>
                             }
                         </div>
@@ -185,7 +209,7 @@ class Dashboard extends React.Component{
                         </div>
                         
                     </div>
-                    <div className="row nextup border">
+                    <div>
                     
                         <Nextup playlist={this.state.playlistDisplay} />
                     </div>
