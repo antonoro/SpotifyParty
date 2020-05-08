@@ -66,7 +66,7 @@ class MyGroups extends React.Component{
                 console.log("addplalist response:", valid);
                 if(valid !== null)
                 {
-                    this.setState({newPlaylist: '', newPlaylistGroup: ''});
+                    this.setState({newPlaylist: '', newPlaylistGroup: '', getgroups: true});
                     console.log(this.state.newPlaylist);
                 }
             });
@@ -86,7 +86,7 @@ class MyGroups extends React.Component{
             .then(valid => {
                 if(valid !== null)
                 {
-                    this.setState({newGroup: ''});
+                    this.setState({newGroup: '', getgroups: true});
                 }
             });
         }
@@ -105,7 +105,8 @@ class MyGroups extends React.Component{
             .then(valid => {
                 if(valid !== null)
                 {
-                    this.setState({newMember: '', newMemberGroup: ''});
+                    this.setState({newMember: '', newMemberGroup: '', getgroups: true});
+                    
                 }
             });
         }

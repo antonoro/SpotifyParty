@@ -25,16 +25,35 @@ function MongoUtils(){
         }
     ));
 
-    mu.insertNewGroup = (group) => mu.connect().then(client => (
+    mu.insertNewGroup = (group, myemail) => mu.connect().then(client => (
+        // Add implementation to verify if name is already used
         client.db(dbName)
         .collection(GroupColl)
         .insertOne({
             groupname: `${group}`,
             playlists: [],
-            members: [],
+            members: [`${myemail}`],
             nextup: "",
             nowplaying: ""
         }).then(() => {
+            console.log("Added!");
+        })
+    ));
+
+    mu.insertMemberinGroup = (member, group) => mu.connect().then(client => (
+        client.db(dbName)
+        .collection(GroupColl)
+        .updateOne({groupname: `${group}`}, { $push: {members: `${member}`}})
+        .then(() => {
+            console.log("Added!");
+        })
+    ));
+
+    mu.insertPlaylistinGroup = (playlistname, group) => mu.connect().then(client => (
+        client.db(dbName)
+        .collection(GroupColl)
+        .updateOne({groupname: `${group}`}, { $push: {playlists: [`${playlistname}`]}})
+        .then(() => {
             console.log("Added!");
         })
     ));

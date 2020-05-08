@@ -233,21 +233,43 @@ router.get('/getallgroups', (req,res) =>{
 router.post('/createplaylist', (req,res) =>{
     console.log("Received new playlist:", req.body.newplaylist);
     console.log("In group: ", req.body.relatedgroup);
-    res.json('Allo');
+    mu.insertPlaylistinGroup(req.body.newplaylist, req.body.relatedgroup)
+    .then(() => {
+        res.json('Allo');
+    });
+    
 });
 
 router.post('/creategroup', (req,res) =>{
 
-    console.log("New group: ", req.body.newgroup);
-    mu.insertNewGroup(req.body.newgroup);
-    res.json('allo');
+    spotifyAPI.getMe()
+    .then(data => {
+        if(data.statusCode === 200)
+        {
+            var myemail = data.body.email;
+            console.log("New group: ", req.body.newgroup);
+            mu.insertNewGroup(req.body.newgroup, myemail)
+            .then(() => {
+                res.json('Done');
+            });
+        }
+        else{
+            res.json(null);
+        }
+    });
+    
+    
 });
 
 router.post('/addmember', (req,res) =>{
 
     console.log("New member: ", req.body.newMember);
     console.log("In group: ", req.body.relatedgroup);
-    res.json('allo');
+    mu.insertMemberinGroup(req.body.newMember, req.body.relatedgroup)
+    .then( () => {
+        res.json('Done.');
+    } 
+    );
 });
 
 
