@@ -226,10 +226,28 @@ router.get('/getallgroups', (req,res) =>{
         else{
             res.json(null);
         }
-    });
-
-        
+    });   
     
+});
+
+router.post('/createplaylist', (req,res) =>{
+    console.log("Received new playlist:", req.body.newplaylist);
+    console.log("In group: ", req.body.relatedgroup);
+    res.json('Allo');
+});
+
+router.post('/creategroup', (req,res) =>{
+
+    console.log("New group: ", req.body.newgroup);
+    mu.insertNewGroup(req.body.newgroup);
+    res.json('allo');
+});
+
+router.post('/addmember', (req,res) =>{
+
+    console.log("New member: ", req.body.newMember);
+    console.log("In group: ", req.body.relatedgroup);
+    res.json('allo');
 });
 
 

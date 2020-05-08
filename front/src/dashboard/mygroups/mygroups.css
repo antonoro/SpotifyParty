@@ -6,3 +6,12 @@
 .fullsize {
     width:100%
 }
+
+#fixedspacing {
+    margin-top: 1em;
+    
+}
+
+.btnAddPlaylist {
+    margin-top: 1em;
+}
