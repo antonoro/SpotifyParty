@@ -57,6 +57,15 @@ function MongoUtils(){
             console.log("Added!");
         })
     ));
+
+    mu.insertTrackinPlaylistGroup = (track, playlistname, group) => mu.connect().then(client => (
+        client.db(dbName)
+        .collection(GroupColl)
+        .updateOne({groupname: `${group}`, playlists: `${playlistname}`}, { $push: {playlists: `${track}`}})
+        .then(() => {
+            console.log("Added!");
+        })
+    ));
         
 
     return mu;

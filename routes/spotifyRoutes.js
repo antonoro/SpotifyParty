@@ -45,7 +45,7 @@ router.get("/logincallback/", async (req,res) => {
 // Update user endpoint
 router.get('/getUser', (req,res) => {
     console.log("GetUser received");
-    console.log("loggedIn, sending username");
+    console.log("Trying to send username");
     spotifyAPI.getMe()
     .then(data => {
         res.json(data.body.display_name);
@@ -178,19 +178,24 @@ router.get('/playdoowop', (req,res) =>{
 });
 
 router.post('/gettracksinfo', (req, res) =>{
-    console.log("Get track info received");
-    
-    spotifyAPI.getTracks(req.body)
-    .then((data) => {
-        if(data.statusCode === 200)
-        {
-            console.log("Got tracks in back:", data.body.tracks);
-            res.json(data.body.tracks);
-        }
-        else{
-            res.json(null);
-        }
-    });
+    console.log("Get track info received", req.body);
+    if(req.body !== [])
+    {
+        spotifyAPI.getTracks(req.body)
+        .then((data) => {
+            if(data.statusCode === 200)
+            {
+                console.log("Got tracks in back:", data.body.tracks);
+                res.json(data.body.tracks);
+            }
+            else{
+                res.json(null);
+            }
+        });
+    }
+    else{
+        res.json('Empty');
+    }
     
     
 });
@@ -271,6 +276,32 @@ router.post('/addmember', (req,res) =>{
     } 
     );
 });
+
+router.post('/addtracktoplaylist', (req,res) =>{
+
+    console.log("New track: ", req.body.uriTrack);
+    console.log("In playlist: ", req.body.playlist);
+    console.log("In group: ", req.body.group);
+    mu.insertTrackinPlaylistGroup(req.body.uriTrack, req.body.playlist, req.body.group)
+    .then( () => {
+        res.json('Done.');
+    } 
+    );
+});
+
+router.post('/searchtracks', (req, res) => {
+    console.log("Searching for tracks containing:", req.body.searchedTrack);
+    spotifyAPI.searchTracks(`${req.body.searchedTrack}`, { limit : 5})
+    .then(data => {
+        if(data.statusCode === 200)
+        {
+            res.json(data.body.tracks);
+        }
+        else{
+            res.json(null);
+        }
+    });
+})
 
 
 module.exports = router;

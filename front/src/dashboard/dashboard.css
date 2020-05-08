@@ -1,20 +1,25 @@
 #mygroups {
     background-color: whitesmoke;
-    min-height: 92vh;
+    min-height: 93vh;
     font-family: 'Playfair Display', serif;
-    padding-top: 5vh;
+    padding-top: 4vh;
+}
+
+#mainrow {
+    min-height: 93vh;
+    background-color: whitesmoke;
 }
 
 .nowplaying {
     background-color: whitesmoke;
     font-family: 'Playfair Display', serif;
-    min-height: 52vh;
-    padding-top: 5vh;
+    min-height: 47vh;
+    padding-top: 4vh;
     text-align: center;
 }
 
 #chat {
     background-color: whitesmoke;
-    padding-top: 5vh;
-    min-height: 92vh;
+    padding-top: 4vh;
+    min-height: 93vh;
 }

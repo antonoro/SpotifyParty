@@ -43,7 +43,8 @@ class MyGroups extends React.Component{
     }
 
     handleSelectedPlaylist = (val) => {
-        this.props.getplaylist(val);
+        this.props.getplaylist(val[0]);
+        this.props.getGroup(val[1]);
     }
 
     handleInputChange = (event) => {
@@ -62,9 +63,9 @@ class MyGroups extends React.Component{
                 body: JSON.stringify({newplaylist: `${this.state.newPlaylist}`, relatedgroup: `${event.target.newPlaylistGroup.value}`}),
                 headers: { 'Content-Type': 'application/json' },
             }).then(res => res.json())
-            .then(valid => {
-                console.log("addplalist response:", valid);
-                if(valid !== null)
+            .then(resp => {
+                console.log("addplaylist response:", resp);
+                if(resp !== null)
                 {
                     this.setState({newPlaylist: '', newPlaylistGroup: '', getgroups: true});
                     console.log(this.state.newPlaylist);
@@ -83,8 +84,8 @@ class MyGroups extends React.Component{
                 body: JSON.stringify({newgroup: `${this.state.newGroup}`}),
                 headers: { 'Content-Type': 'application/json' },
             }).then(res => res.json())
-            .then(valid => {
-                if(valid !== null)
+            .then(resp => {
+                if(resp !== null)
                 {
                     this.setState({newGroup: '', getgroups: true});
                 }
@@ -102,8 +103,8 @@ class MyGroups extends React.Component{
                 body: JSON.stringify({newMember: `${this.state.newMember}`, relatedgroup: `${event.target.newMemberGroup.value}`}),
                 headers: { 'Content-Type': 'application/json' },
             }).then(res => res.json())
-            .then(valid => {
-                if(valid !== null)
+            .then(resp => {
+                if(resp !== null)
                 {
                     this.setState({newMember: '', newMemberGroup: '', getgroups: true});
                     
@@ -167,7 +168,7 @@ class MyGroups extends React.Component{
                                                         {group.playlists.map((playlist, i) => {
                                                             return(
             
-                                                                <ToggleButton value={this.state.groups[index].playlists[i]}>{playlist[0]}</ToggleButton>
+                                                                <ToggleButton value={[this.state.groups[index].playlists[i],this.state.groups[index].groupname]} >{playlist[0]}</ToggleButton>
                                                                 
                                                             )
                                                         })

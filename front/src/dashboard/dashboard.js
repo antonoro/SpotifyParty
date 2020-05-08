@@ -17,7 +17,8 @@ class Dashboard extends React.Component{
             changePlaybackTriggerPrevious: false,
             changePlayback: null,
             playback: null,
-            playlistDisplay: null,
+            playlistDisplay: [],
+            group: '',
         };
     }
 
@@ -160,19 +161,29 @@ class Dashboard extends React.Component{
         this.setState({playlistDisplay: playlist});
     }
 
+    getSelectedGroup = (group) => {
+        console.log("Got selected group in dashboard: ", group);
+        this.setState({group: group});
+    }
+
+    addedSongtoPlaylist = (track) => {
+        console.log("Got added song in dashboard: ", track);
+        this.setState({playlistDisplay: [...this.state.playlistDisplay, track]});
+    }
+
     render(){
         
         return (
-            <div className="row">    
-                <div id="mygroups" className="col-2 border">
+            <div id="mainrow" className="row">    
+                <div id="mygroups" className="col-2 border-right border-top">
                     <div className="row justify-content-center">
                         <h2>My groups</h2>
-                        <MyGroups user={this.state.user} getplaylist={this.getSelectedPlaylist}/>
+                        <MyGroups user={this.state.user} getplaylist={this.getSelectedPlaylist} getGroup={this.getSelectedGroup}/>
                     </div>
                     
                 </div>
                 <div className="col-7">
-                    <div className="row nowplaying border">
+                    <div className="row nowplaying border-bottom border-top">
                         <div className="col-6">
                             { (this.state.item === null || this.state.item === undefined) ?
                                 <div>    
@@ -211,11 +222,11 @@ class Dashboard extends React.Component{
                     </div>
                     <div>
                     
-                        <Nextup playlist={this.state.playlistDisplay} />
+                        <Nextup playlist={this.state.playlistDisplay} gettrack={this.addedSongtoPlaylist} group={this.state.group}/>
                     </div>
                     
                 </div>
-                <div id="chat" className="col-3 border">
+                <div id="chat" className="col-3 border-left border-top">
                     <h2>Chat</h2>
                 </div>
             </div>
