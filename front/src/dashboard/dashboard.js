@@ -13,11 +13,13 @@ class Dashboard extends React.Component{
             item: null,
             refreshToggled: false,
             playbackCommandtrigger: false,
+            playListCommandtrigger: false,
             changePlaybackTriggerNext: false,
             changePlaybackTriggerPrevious: false,
             changePlayback: null,
             playback: null,
             playlistDisplay: null,
+            nextup: null,
             group: '',
         };
     }
@@ -56,8 +58,9 @@ class Dashboard extends React.Component{
 
         if(this.state.changePlaybackTriggerNext)
         {
-            console.log('next song');
-            this.changePlaybackNext();
+            console.log('next song: ',this.state.playlistDisplay.tracklist[0]);
+            //this.changePlaybackNext();
+            this.playSong(this.state.playlistDisplay.tracklist[0]);
             
         }
         if(this.state.changePlaybackTriggerPrevious)
@@ -103,6 +106,24 @@ class Dashboard extends React.Component{
         );
         
     }
+
+    playSong = (songuri) => {
+        fetch("/playsong", 
+        {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({songuri}),
+        }).then(res => res.json()
+        .then(res => {
+            console.log(res);
+            this.setState({changePlaybackTriggerNext: false});
+            console.log("Waiting for spotify to change song...");
+            setTimeout( () => {
+                this.setState({refreshToggled: true});
+            }, 1000); // Not good practice, should find a way to coordinate with spotify, but can't predict when it'll actually have changed the song
+        }));
+        
+    } 
 
     changePlaybackNext = () => {
         console.log("Changing playback...");

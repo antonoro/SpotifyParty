@@ -159,13 +159,13 @@ router.get('/pause', (req,res) =>{
     
 });
 
-router.get('/playdoowop', (req,res) =>{
-    console.log("Doo wop received");
-
-    spotifyAPI.play({uris: ["spotify:track:17RcMFZHPrjusBlklhSKou"]})
+router.post('/playsong', (req,res) =>{
+    console.log("Play song received:", req.body);
+    var uri = "spotify:track:"+req.body.songuri;
+    spotifyAPI.play({uris: [`${uri}`]})
     .then((data) => {
         if(data.statusCode === 204){
-            console.log("Doo Wop playing");
+            console.log("Song playing");
             res.json("Play");
         }
         else{
