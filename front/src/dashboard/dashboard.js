@@ -19,7 +19,7 @@ class Dashboard extends React.Component{
             changePlayback: null,
             playback: null,
             playlistDisplay: null,
-            nextup: null,
+            iteratorPlaylist:0,
             group: '',
         };
     }
@@ -58,9 +58,19 @@ class Dashboard extends React.Component{
 
         if(this.state.changePlaybackTriggerNext)
         {
-            console.log('next song: ',this.state.playlistDisplay.tracklist[0]);
+            if(this.state.iteratorPlaylist < this.state.playlistDisplay.tracklist.length)
+            {
+            var i = this.state.iteratorPlaylist;
+            console.log("size:", this.state.playlistDisplay.tracklist.length);
+            console.log("iterator: ", i);
+            console.log('next song: ',this.state.playlistDisplay.tracklist[i]);
             //this.changePlaybackNext();
-            this.playSong(this.state.playlistDisplay.tracklist[0]);
+            this.playSong(this.state.playlistDisplay.tracklist[i]);
+            }
+            else{
+                this.setState({iteratorPlaylist: 0});
+                console.log("Reset iterator: ", this.state.iteratorPlaylist);
+            }
             
         }
         if(this.state.changePlaybackTriggerPrevious)
@@ -99,7 +109,7 @@ class Dashboard extends React.Component{
             {
                 console.log("Done!: ", res);
                 this.setState({
-                    playbackCommandtrigger: false
+                    playbackCommandtrigger: false,
                 });
             }
         })
@@ -116,11 +126,22 @@ class Dashboard extends React.Component{
         }).then(res => res.json()
         .then(res => {
             console.log(res);
-            this.setState({changePlaybackTriggerNext: false});
-            console.log("Waiting for spotify to change song...");
-            setTimeout( () => {
-                this.setState({refreshToggled: true});
-            }, 1000); // Not good practice, should find a way to coordinate with spotify, but can't predict when it'll actually have changed the song
+            if((this.state.iteratorPlaylist + 1) < this.state.playlistDisplay.tracklist.length)
+            {
+                console.log("Waiting for spotify to change song...");
+                setTimeout( () => {
+                    this.setState({
+                        refreshToggled: true,
+                        changePlaybackTriggerNext: false, 
+                        iteratorPlaylist: this.state.iteratorPlaylist + 1,
+                    });
+                }, 1000); // Not good practice, should find a way to coordinate with spotify, but can't predict when it'll actually have changed the song
+            }
+            else{
+                this.setState({changePlaybackTriggerNext: false, iteratorPlaylist: 0});
+                console.log("Reset iterator: ", this.state.iteratorPlaylist);
+            }
+           
         }));
         
     } 
@@ -179,7 +200,7 @@ class Dashboard extends React.Component{
 
     getSelectedPlaylist = (playlist) => {
         console.log("Got selected playlist in dashboard: ", playlist.name);
-        this.setState({playlistDisplay: playlist});
+        this.setState({playlistDisplay: playlist, iteratorPlaylist: 0});
     }
 
     getSelectedGroup = (group) => {
@@ -242,7 +263,7 @@ class Dashboard extends React.Component{
                         
                     </div>
                     <div>
-                        <Nextup playlist={this.state.playlistDisplay} getUpdatedPlaylist={this.addedSongtoPlaylist} group={this.state.group}/>
+                        <Nextup playlist={this.state.playlistDisplay} getUpdatedPlaylist={this.addedSongtoPlaylist} group={this.state.group} nextup={this.state.iteratorPlaylist}/>
                     </div>
                     
                 </div>

@@ -10,8 +10,8 @@ class Nextup extends React.Component{
             group: '',
             playlist: null,
             playlistname: null,
-            tracklist: [],
-            nextup: [],
+            tracklist: [["", ""]],
+            nextup: 0,
             searchedTrack: '',
             foundTracks: [],
         }
@@ -35,6 +35,15 @@ class Nextup extends React.Component{
             }
         }
 
+        if(this.state.nextup !== this.props.nextup)
+        {
+            if(this.props.nextup < this.state.tracklist.length)
+            {
+                this.setState({nextup: this.props.nextup});
+            }
+            
+        }
+
     
     }
 
@@ -52,7 +61,7 @@ class Nextup extends React.Component{
                 tracks[i] = [track.name, track.artists[0].name, track.album.name, `${(Math.floor(track.duration_ms/60000)).toFixed(0)}:${((track.duration_ms/1000)%60).toFixed(0)}`, track.uri];
             });
             console.log("Tracks:", tracks);
-            this.setState({tracklist: tracks, nextup: tracks[0]});
+            this.setState({tracklist: tracks});
         }));
         
     } 
@@ -110,7 +119,7 @@ class Nextup extends React.Component{
                 <div className="col-6 border-right">
                 { this.state.playlist !== null ?
                     <div className="nextup">
-                        <h3>Next up: {this.state.nextup[0]} - {this.state.nextup[1]}</h3>
+                        <h3>Next up: {this.state.tracklist[this.state.nextup][0]} - {this.state.tracklist[this.state.nextup][1]}</h3>
                         <label>Playlist name: {this.state.playlistname}</label>
                         <Table striped border>
                             <thead>
