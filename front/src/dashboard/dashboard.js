@@ -64,7 +64,7 @@ class Dashboard extends React.Component{
             console.log("size:", this.state.playlistDisplay.tracklist.length);
             console.log("iterator: ", i);
             console.log('next song: ',this.state.playlistDisplay.tracklist[i]);
-            //this.changePlaybackNext();
+            
             this.playSong(this.state.playlistDisplay.tracklist[i]);
             
         }
@@ -130,7 +130,7 @@ class Dashboard extends React.Component{
         }).then(res => res.json()
         .then(res => {
             console.log(res);
-            if((this.state.iteratorPlaylist + 1) < this.state.playlistDisplay.tracklist.length)
+            if((this.state.iteratorPlaylist) < this.state.playlistDisplay.tracklist.length)
             {
                 console.log("Waiting for spotify to change song...");
                 setTimeout( () => {
@@ -268,10 +268,10 @@ class Dashboard extends React.Component{
                                     :
                                         <button className="btn btn-success" onClick={() => this.setState({playbackCommandtrigger: true, playback: true})}>Play</button>
                                     }
-                                    { this.state.playlistDisplay !== null ?
-                                    <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTriggerNext: true})}>Next</button>    
+                                    { this.state.playlistDisplay !== null && this.state.iteratorPlaylist < this.state.playlistDisplay.tracklist.length ?
+                                        <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTriggerNext: true})}>Next</button>
                                     :
-                                    <div></div>
+                                        <button className="btn btn-primary" disabled>Next</button>
                                     }
                                     
                                 </div>
