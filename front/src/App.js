@@ -10,6 +10,7 @@ class App extends React.Component {
     this.state = {
       loggedIn: false,
       userState: null,
+      deviceID: null,
     };
   };
 
@@ -26,6 +27,21 @@ class App extends React.Component {
     }));
   }
 
+  componentDidUpdate(){
+    if(this.state.deviceID === null)
+    {
+      fetch("/mydevices")
+      .then(res => res.json()
+      .then(res => {
+        if(res !== this.state.deviceID)
+        {
+          this.setState({deviceID: res});
+        }
+      }));
+    }
+  }
+
+
   render()
   {  
     return (
@@ -33,7 +49,7 @@ class App extends React.Component {
 
           <TopHeader user={this.state.userState}/>
         <div className="container-fluid">  
-          <Dashboard user={this.state.userState}/>
+          <Dashboard user={this.state.userState} deviceID={this.state.deviceID}/>
         </div>
         
         

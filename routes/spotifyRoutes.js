@@ -14,9 +14,8 @@ const spotifyAPI = new SpotifyWebAPI({
     redirectUri: process.env.REDIRECT_URI
 });
 
-const scopes = ["user-read-currently-playing", "user-read-playback-state", "user-modify-playback-state", "user-read-email"];
-const authorizeSpotifyURL = "https://accounts.spotify.com/authorize";
-const tokenSpotifyURL = "https://accounts.spotify.com/api/token";
+const scopes = ["user-read-currently-playing", "user-read-playback-state", "user-modify-playback-state", "user-read-email", "streaming"];
+
 
 //Login endpoint
 router.get('/login', (req, res) => {
@@ -51,6 +50,24 @@ router.get('/getUser', (req,res) => {
         res.json(data.body.display_name);
     }).catch(err => {console.log('error getting user info from spotify')});
     
+});
+
+router.get('/mydevices', (req, res) => {
+    console.log("Get devices received");
+    spotifyAPI.getMyDevices()
+    .then(data => {
+        var devicesArray = data.body.devices;
+        var computerIDs = [], index = 0;
+        devicesArray.map((element, i) => {
+            if(element.type === "Computer")
+            {
+                computerIDs[index] = element.id;
+                index = index + 1; 
+            }
+        })
+        console.log("Computer IDs", computerIDs);
+        res.json(computerIDs[0]);
+    });
 });
 
 router.get('/getplayback', (req, res) => {
@@ -161,8 +178,9 @@ router.get('/pause', (req,res) =>{
 
 router.post('/playsong', (req,res) =>{
     console.log("Play song received:", req.body);
-    var uri = "spotify:track:"+req.body.songuri;
-    spotifyAPI.play({uris: [`${uri}`]})
+    var uri = "spotify:track:"+req.body.uri;
+    var deviceID = req.body.deviceID;
+    spotifyAPI.play({uris: [`${uri}`], device_id: `${deviceID}`})
     .then((data) => {
         if(data.statusCode === 204){
             console.log("Song playing");

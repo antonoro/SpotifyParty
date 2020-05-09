@@ -31,7 +31,7 @@ class Nextup extends React.Component{
                 this.getTrackInfos(urilist);
             }
             else{
-                this.setState({tracklist: [], nextup: []});
+                this.setState({tracklist: [["", ""]]});
             }
         }
 
@@ -40,6 +40,11 @@ class Nextup extends React.Component{
             if(this.props.nextup < this.state.tracklist.length)
             {
                 this.setState({nextup: this.props.nextup});
+            }
+
+            if(this.state.tracklist.length === 0)
+            {
+                this.setState({nextup: 0});
             }
             
         }

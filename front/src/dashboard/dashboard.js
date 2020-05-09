@@ -9,6 +9,7 @@ class Dashboard extends React.Component{
         super();
         this.state = {
             user: null,
+            deviceID: null,
             loggedIn: false,
             item: null,
             refreshToggled: false,
@@ -29,9 +30,9 @@ class Dashboard extends React.Component{
 
     componentDidUpdate(){
 
-        if(this.props.user !== this.state.user && this.props.user !== null) // when user changes
+        if(this.props.user !== this.state.user && this.props.user !== null && this.props.deviceID !== this.state.deviceID && this.props.deviceID !== null) // when user changes
         {
-            this.setState({user: this.props.user, loggedIn: true});
+            this.setState({user: this.props.user, loggedIn: true, deviceID: this.props.deviceID});
             this.getMusicInfo();
         }
 
@@ -58,25 +59,28 @@ class Dashboard extends React.Component{
 
         if(this.state.changePlaybackTriggerNext)
         {
-            if(this.state.iteratorPlaylist < this.state.playlistDisplay.tracklist.length)
-            {
+            
             var i = this.state.iteratorPlaylist;
             console.log("size:", this.state.playlistDisplay.tracklist.length);
             console.log("iterator: ", i);
             console.log('next song: ',this.state.playlistDisplay.tracklist[i]);
             //this.changePlaybackNext();
             this.playSong(this.state.playlistDisplay.tracklist[i]);
-            }
-            else{
-                this.setState({iteratorPlaylist: 0});
-                console.log("Reset iterator: ", this.state.iteratorPlaylist);
-            }
             
         }
         if(this.state.changePlaybackTriggerPrevious)
         {   
-            console.log('previous song');
-            this.changePlaybackPrevious();
+            if(this.state.iteratorPlaylist > 0)
+            {
+                var i = this.state.iteratorPlaylist -1;
+            }
+            else
+            {
+                var i = 0;
+            }
+            console.log('previous song: ',this.state.playlistDisplay.tracklist[i]);
+            
+            this.playSong(this.state.playlistDisplay.tracklist[i]);
         }
     }
 
@@ -122,7 +126,7 @@ class Dashboard extends React.Component{
         {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({songuri}),
+            body: JSON.stringify({uri: `${songuri}`, deviceID: `${this.state.deviceID}`}),
         }).then(res => res.json()
         .then(res => {
             console.log(res);
@@ -130,16 +134,29 @@ class Dashboard extends React.Component{
             {
                 console.log("Waiting for spotify to change song...");
                 setTimeout( () => {
-                    this.setState({
-                        refreshToggled: true,
-                        changePlaybackTriggerNext: false, 
-                        iteratorPlaylist: this.state.iteratorPlaylist + 1,
-                    });
+                    if(this.state.changePlaybackTriggerNext)
+                    {
+                        this.setState({
+                            refreshToggled: true,
+                            changePlaybackTriggerNext: false,
+                            iteratorPlaylist: this.state.iteratorPlaylist + 1,
+                        });
+                    }
+                    else if(this.state.changePlaybackTriggerPrevious){
+                        this.setState({
+                            refreshToggled: true,
+                            changePlaybackTriggerPrevious: false,
+                            iteratorPlaylist: this.state.iteratorPlaylist + 1,
+                        });
+                    }
                 }, 1000); // Not good practice, should find a way to coordinate with spotify, but can't predict when it'll actually have changed the song
             }
             else{
-                this.setState({changePlaybackTriggerNext: false, iteratorPlaylist: 0});
-                console.log("Reset iterator: ", this.state.iteratorPlaylist);
+                setTimeout( () => {
+                    this.setState({refreshToggled: true, changePlaybackTriggerNext: false, iteratorPlaylist: 0});
+                    console.log("Reset iterator: ", this.state.iteratorPlaylist);
+                
+                }, 1000); // Not good practice, should find a way to coordinate with spotify, but can't predict when it'll actually have changed the song
             }
            
         }));
@@ -231,6 +248,12 @@ class Dashboard extends React.Component{
                                 <div>    
                                     <h2>Now Playing: [Nothing is playing]</h2>
                                     <button className="btn btn-warning" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
+                                    { this.state.playlistDisplay !== null ?
+                                        <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTriggerNext: true})}>Play Next</button>
+                                    :
+                                        <div>
+                                        </div>
+                                    }
                                 </div>
                             : 
                                 <div>
@@ -238,14 +261,19 @@ class Dashboard extends React.Component{
                                     <h5>{this.state.item.name}</h5>
                                     <h6>Artist: {this.state.item.artists[0].name}</h6>
                                     <h6>Album: {this.state.item.album.name}</h6>
-                                    <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTriggerPrevious: true})}>Previous</button>
+                                    
                                     <button className="btn btn-warning" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
                                     { this.state.playback ?
                                         <button className="btn btn-danger" onClick={() => this.setState({playbackCommandtrigger: true, playback: false})}>Pause</button>
                                     :
                                         <button className="btn btn-success" onClick={() => this.setState({playbackCommandtrigger: true, playback: true})}>Play</button>
                                     }
+                                    { this.state.playlistDisplay !== null ?
                                     <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTriggerNext: true})}>Next</button>    
+                                    :
+                                    <div></div>
+                                    }
+                                    
                                 </div>
                             }
                         </div>
