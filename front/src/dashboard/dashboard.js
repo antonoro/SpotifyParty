@@ -237,7 +237,7 @@ class Dashboard extends React.Component{
                 <div id="mygroups" className="col-2 border-right border-top">
                     <div className="row justify-content-center">
                         <h2>My groups</h2>
-                        <MyGroups user={this.state.user} getplaylist={this.getSelectedPlaylist} getGroup={this.getSelectedGroup}/>
+                        <MyGroups user={this.state.user} getplaylist={this.getSelectedPlaylist} getGroup={this.getSelectedGroup} updatedPlaylist={this.state.playlistDisplay}/>
                     </div>
                     
                 </div>

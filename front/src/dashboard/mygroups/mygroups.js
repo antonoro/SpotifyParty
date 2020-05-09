@@ -26,6 +26,29 @@ class MyGroups extends React.Component{
             
         }
 
+        if(this.state.groups !== null && this.props.updatedPlaylist !== null)
+        {
+            var groups = this.state.groups;
+            groups.map((element, i) => {
+                if(element.playlists.length > 0)
+                {
+                    var playlists = element.playlists;
+                    playlists.map((playlist, index) => {
+                        if(playlist.name === this.props.updatedPlaylist.name)
+                        {
+                            if(playlist.tracklist !== this.props.updatedPlaylist.tracklist)
+                            {
+                                var newgroups = groups;
+                                newgroups[i].playlists[index].tracklist = this.props.updatedPlaylist.tracklist;
+                                this.setState({groups: newgroups});
+                                
+                            }
+                        }
+                    });
+                }
+            });
+        }    
+
         if(this.state.loggedIn = true && this.state.getgroups === true)
         {
             this.getAllgroups();
