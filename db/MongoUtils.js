@@ -52,21 +52,52 @@ function MongoUtils(){
     mu.insertPlaylistinGroup = (playlistname, group) => mu.connect().then(client => (
         client.db(dbName)
         .collection(GroupColl)
-        .updateOne({groupname: `${group}`}, { $push: {playlists: [`${playlistname}`]}})
+        .updateOne({groupname: `${group}`}, { $push: {playlists: {name: `${playlistname}`, tracklist: []}}})
         .then(() => {
             console.log("Added!");
+            return('Done');
         })
     ));
 
-    mu.insertTrackinPlaylistGroup = (track, playlistname, group) => mu.connect().then(client => (
+    mu.getOldPlaylist = (track, playlistname, group) => mu.connect().then(client => (
+
         client.db(dbName)
         .collection(GroupColl)
-        .updateOne({groupname: `${group}`, playlists: `${playlistname}`}, { $push: {playlists: `${track}`}})
-        .then(() => {
-            console.log("Added!");
-        })
+        .findOne({'playlists.name': playlistname})
+        )
+        .then(dataCollection => {
+            var oldplaylists = dataCollection.playlists;
+            var newplaylists = [], newplaylist = {}, newtracklist = [];
+            oldplaylists.map((playlist, index) => {
+                if(playlist.name === playlistname)
+                {
+                    newtracklist = playlist.tracklist;
+                    newtracklist.push(track);
+                    newplaylist = {name: playlistname, tracklist: newtracklist};
+                    newplaylists[index] = newplaylist;
+                }
+                else{
+                    newplaylists[index] = {name: playlist.name, tracklist: playlist.tracklist};
+                }
+            });
+            client.close();
+            var comboPlaylists = [newplaylist, newplaylists];
+            return comboPlaylists;
+        }
     ));
-        
+    
+    mu.updatePlaylist = (playlistname, newplaylists) => mu.connect().then(client => (
+
+        client.db(dbName)
+        .collection(GroupColl)
+        .updateOne({'playlists.name': playlistname}, {$set: {playlists: newplaylists}})
+        )
+        .then(() => {
+            client.close();
+            return('Done');
+        }
+    ));
+    
 
     return mu;
 }

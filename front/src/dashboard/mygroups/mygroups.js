@@ -168,7 +168,7 @@ class MyGroups extends React.Component{
                                                         {group.playlists.map((playlist, i) => {
                                                             return(
             
-                                                                <ToggleButton value={[this.state.groups[index].playlists[i],this.state.groups[index].groupname]} >{playlist[0]}</ToggleButton>
+                                                                <ToggleButton value={[this.state.groups[index].playlists[i],this.state.groups[index].groupname]} >{playlist.name}</ToggleButton>
                                                                 
                                                             )
                                                         })

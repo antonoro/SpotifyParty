@@ -19,16 +19,13 @@ class Nextup extends React.Component{
 
     componentDidUpdate(){
         
-        if(this.state.playlist !== this.props.playlist && this.props.playlist.length > 0)
+        if(this.state.playlist !== this.props.playlist && this.props.playlist !== null)
         { 
             var urilist = [];
-            this.props.playlist.map((element,i) => {
-                if( i > 0)
-                {
-                    urilist[i-1] = element;
-                }
+            this.props.playlist.tracklist.map((element,i) => {
+                    urilist[i] = element;
             });
-            this.setState({playlist: this.props.playlist, group: this.props.group});
+            this.setState({playlist: this.props.playlist, playlistname: this.props.playlist.name, group: this.props.group});
             if(urilist.length > 0)
             {
                 this.getTrackInfos(urilist);
@@ -92,13 +89,17 @@ class Nextup extends React.Component{
     }
 
     addSongtoMongo = (song) => {
+        console.log(song.target.value);
+        var uri = song.target.value.split(':');
         fetch("/addtracktoplaylist", {
             method:'POST',
-            body: JSON.stringify({uriTrack: `${song[3]}`,playlist: `${this.state.playlist[0]}`, group: `${this.state.group}`}),
+            body: JSON.stringify({uriTrack: `${uri[2]}`,playlist: `${this.state.playlistname}`, group: `${this.state.group}`}),
             headers: { 'Content-Type': 'application/json' },
         }).then(res => res.json())
         .then(resp => {
-
+            console.log("Playlists", resp);
+            this.setState({foundTracks: []});
+            this.props.getUpdatedPlaylist(resp);
         });
     }
 
@@ -110,7 +111,7 @@ class Nextup extends React.Component{
                 { this.state.playlist !== null ?
                     <div className="nextup">
                         <h3>Next up: {this.state.nextup[0]} - {this.state.nextup[1]}</h3>
-                        <label>Playlist name: {this.state.playlist[0]}</label>
+                        <label>Playlist name: {this.state.playlistname}</label>
                         <Table striped border>
                             <thead>
                                 <th>#</th>
@@ -164,7 +165,7 @@ class Nextup extends React.Component{
                                             <td>{element[1]}</td>
                                             <td>{element[2]}</td>
                                             <td>
-                                                <button onClick={this.addSongtoMongo(this.state.foundTracks[index])} className="btn btn-success">Add</button>
+                                                <button onClick={this.addSongtoMongo.bind(this)} value={element[3]} className="btn btn-success">Add</button>
                                             </td>
                                         </tr>
                                     )

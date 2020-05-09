@@ -185,7 +185,7 @@ router.post('/gettracksinfo', (req, res) =>{
         .then((data) => {
             if(data.statusCode === 200)
             {
-                console.log("Got tracks in back:", data.body.tracks);
+                console.log("Got tracks in back:");
                 res.json(data.body.tracks);
             }
             else{
@@ -225,6 +225,7 @@ router.get('/getallgroups', (req,res) =>{
             var myemail = data.body.email;
             mu.getGroupsData(myemail)
             .then(arraydata =>{
+                console.log("array data", arraydata);
                 res.json(arraydata);
             });
         }
@@ -282,9 +283,13 @@ router.post('/addtracktoplaylist', (req,res) =>{
     console.log("New track: ", req.body.uriTrack);
     console.log("In playlist: ", req.body.playlist);
     console.log("In group: ", req.body.group);
-    mu.insertTrackinPlaylistGroup(req.body.uriTrack, req.body.playlist, req.body.group)
-    .then( () => {
-        res.json('Done.');
+    mu.getOldPlaylist(req.body.uriTrack, req.body.playlist, req.body.group)
+    .then( comboplaylists => {
+        console.log("new playlists: ", comboplaylists[1]);
+        mu.updatePlaylist(req.body.playlist, comboplaylists[1])
+        .then(() => {
+            res.json(comboplaylists[0]);
+        })
     } 
     );
 });

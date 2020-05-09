@@ -17,7 +17,7 @@ class Dashboard extends React.Component{
             changePlaybackTriggerPrevious: false,
             changePlayback: null,
             playback: null,
-            playlistDisplay: [],
+            playlistDisplay: null,
             group: '',
         };
     }
@@ -157,7 +157,7 @@ class Dashboard extends React.Component{
     }
 
     getSelectedPlaylist = (playlist) => {
-        console.log("Got selected playlist in dashboard: ", playlist);
+        console.log("Got selected playlist in dashboard: ", playlist.name);
         this.setState({playlistDisplay: playlist});
     }
 
@@ -166,9 +166,9 @@ class Dashboard extends React.Component{
         this.setState({group: group});
     }
 
-    addedSongtoPlaylist = (track) => {
-        console.log("Got added song in dashboard: ", track);
-        this.setState({playlistDisplay: [...this.state.playlistDisplay, track]});
+    addedSongtoPlaylist = (newplaylist) => {
+        console.log("Got updated playlist in dashboard: ", newplaylist);
+        this.setState({playlistDisplay: newplaylist});
     }
 
     render(){
@@ -221,8 +221,7 @@ class Dashboard extends React.Component{
                         
                     </div>
                     <div>
-                    
-                        <Nextup playlist={this.state.playlistDisplay} gettrack={this.addedSongtoPlaylist} group={this.state.group}/>
+                        <Nextup playlist={this.state.playlistDisplay} getUpdatedPlaylist={this.addedSongtoPlaylist} group={this.state.group}/>
                     </div>
                     
                 </div>
