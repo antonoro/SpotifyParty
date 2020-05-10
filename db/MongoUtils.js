@@ -66,7 +66,7 @@ function MongoUtils(){
 
         client.db(dbName)
         .collection(GroupColl)
-        .findOne({'playlists.name': playlistname})
+        .findOne({ groupname: `${group}`, 'playlists.name': playlistname})
         )
         .then(dataCollection => {
             var oldplaylists = dataCollection.playlists;
@@ -89,11 +89,11 @@ function MongoUtils(){
         }
     ));
     
-    mu.updatePlaylist = (playlistname, newplaylists) => mu.connect().then(client => (
+    mu.updatePlaylist = (playlistname, newplaylists, group) => mu.connect().then(client => (
 
         client.db(dbName)
         .collection(GroupColl)
-        .updateOne({'playlists.name': playlistname}, {$set: {playlists: newplaylists}})
+        .updateOne({ groupname: `${group}`, 'playlists.name': playlistname}, {$set: {playlists: newplaylists}})
         )
         .then(() => {
             client.close();

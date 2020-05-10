@@ -20,7 +20,7 @@ class Nextup extends React.Component{
 
     componentDidUpdate(){
         
-        if(this.state.playlist !== this.props.playlist && this.props.playlist !== null)
+        if(this.state.playlist !== this.props.playlist && this.props.playlist !== null && this.props.groups !== this.state.group)
         { 
             var urilist = [];
             this.props.playlist.tracklist.map((element,i) => {
@@ -119,7 +119,7 @@ class Nextup extends React.Component{
         .then(resp => {
             console.log("Playlists", resp);
             this.setState({foundTracks: []});
-            this.props.getUpdatedPlaylist(resp);
+            this.props.getUpdatedPlaylist(resp, this.state.group);
         });
     }
 
@@ -131,7 +131,7 @@ class Nextup extends React.Component{
                 { this.state.playlist !== null ?
                     <div className="nextup">
                         <h3>Next up: {this.state.tracklist[this.state.nextup][0]} - {this.state.tracklist[this.state.nextup][1]}</h3>
-                        <label>Playlist name: {this.state.playlistname}</label>
+                        <label>Playlist name: {this.state.playlistname} Group: {this.state.group}</label>
                         <Table striped border>
                             <thead>
                                 <th>#</th>

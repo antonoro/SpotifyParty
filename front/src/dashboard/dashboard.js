@@ -21,6 +21,7 @@ class Dashboard extends React.Component{
             changePlayback: null,
             playback: null,
             playlistDisplay: null,
+            playlistToMyGroups: null,
             iteratorPlaylist:0,
             group: '',
         };
@@ -229,9 +230,9 @@ class Dashboard extends React.Component{
         
     }
 
-    getSelectedPlaylist = (playlist) => {
-        console.log("Got selected playlist in dashboard: ", playlist.name);
-        this.setState({playlistDisplay: playlist, iteratorPlaylist: 0});
+    getSelectedPlaylist = (playlist, group) => {
+        console.log("Got selected playlist in dashboard: ", `${playlist.tracklist} from group: ${group}`);
+        this.setState({playlistDisplay: playlist, iteratorPlaylist: 0, group: group});
     }
 
     getSelectedGroup = (group) => {
@@ -239,9 +240,9 @@ class Dashboard extends React.Component{
         this.setState({group: group});
     }
 
-    addedSongtoPlaylist = (newplaylist) => {
-        console.log("Got updated playlist in dashboard: ", newplaylist);
-        this.setState({playlistDisplay: newplaylist});
+    addedSongtoPlaylist = (newplaylist, group) => {
+        console.log("Got updated playlist in dashboard: ", `${newplaylist} from group: ${group}`);
+        this.setState({playlistDisplay: newplaylist, playlistToMyGroups: newplaylist, group: group});
     }
 
     render(){
@@ -251,7 +252,7 @@ class Dashboard extends React.Component{
                 <div id="mygroups" className="col-2 border-right border-top">
                     <div className="row justify-content-center">
                         <h2>My groups</h2>
-                        <MyGroups userid={this.state.userID} user={this.state.user} getplaylist={this.getSelectedPlaylist} getGroup={this.getSelectedGroup} updatedPlaylist={this.state.playlistDisplay}/>
+                        <MyGroups userid={this.state.userID} user={this.state.user} getplaylist={this.getSelectedPlaylist} getGroup={this.getSelectedGroup} selectedGroup={this.state.group} playlistToMyGroups={this.state.playlistToMyGroups}/>
                     </div>
                     
                 </div>

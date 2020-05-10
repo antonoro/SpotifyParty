@@ -11,6 +11,8 @@ class App extends React.Component {
       loggedin: false,
       userState: null,
       deviceID: null,
+      devicename: null,
+      deviceactive: false,
       userID: null,
       getUserToggled: false,
     };
@@ -100,10 +102,18 @@ class App extends React.Component {
       })
       .then(res => res.json()
       .then(res => {
-        if(res !== this.state.deviceID)
+        if(res.length === 0)
         {
-          this.setState({deviceID: res});
+          alert("No listening is activated. Open your web browser at open.spotify.com, active your device (play/pause) and reload page.");
         }
+        else{
+          console.log("Device found: ", res[0]);
+          if(res[0].deviceid !== this.state.deviceID)
+        {
+          this.setState({deviceID: res[0].deviceid, devicename: res[0].devicename, deviceactive: res[0].deviceactive});
+        }
+        }
+        
       }));
     }
   }
@@ -118,7 +128,7 @@ class App extends React.Component {
     return (
       <div className="App">
 
-          <TopHeader user={this.state.userState} getID={this.getID}/>
+          <TopHeader user={this.state.userState} getID={this.getID} devicename={this.state.devicename} deviceactive={this.state.deviceactive}/>
         <div className="container-fluid">  
           <Dashboard user={this.state.userState} deviceID={this.state.deviceID} userid={this.state.userID}/>
         </div>

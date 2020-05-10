@@ -25,6 +25,8 @@ class TopHeader extends React.Component{
         this.state = {
             user: null,
             userid: null,
+            devicename: null, 
+            deviceactive: false,
         };
     }
 
@@ -48,6 +50,11 @@ class TopHeader extends React.Component{
 
         if(this.props.user !== this.state.user)
         {this.setState({user: this.props.user});}
+
+        if(this.state.devicename !== this.props.devicename && this.props.devicename !== null)
+        {
+            this.setState({devicename: this.props.devicename, deviceactive: `${this.props.deviceactive}`})
+        }
         
     }
 
@@ -71,11 +78,11 @@ class TopHeader extends React.Component{
                     <Nav className="ml-auto">
                         <NavDropdown className="myaccountTag" title="My Account" id="basic-nav-dropdown">
 
-                            <NavDropdown.Item href="#">Hello, {this.state.user}</NavDropdown.Item>
+                            <NavDropdown.Item>Hello, {this.state.user}</NavDropdown.Item>
 
-                            <NavDropdown.Item href="#">Preferences</NavDropdown.Item>
+                            <NavDropdown.Item>Device name: {this.state.devicename}</NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item>Log out</NavDropdown.Item>
+                            <NavDropdown.Item href="/">Log out</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                     }

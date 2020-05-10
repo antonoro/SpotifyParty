@@ -17,6 +17,8 @@ class MyGroups extends React.Component{
             newGroup: '',
             newMember: '',
             newMemberGroup: '',
+            selectedGroup: null,
+            updatedPlaylist: null,
         }
     }
 
@@ -27,22 +29,29 @@ class MyGroups extends React.Component{
             
         }
 
-        if(this.state.groups !== null && this.props.updatedPlaylist !== null)
+        if(this.state.selectedGroup !== this.props.selectedGroup)
+        {
+            this.setState({selectedGroup: this.props.selectedGroup});
+        }
+
+        if(this.state.groups !== null && this.state.selectedGroup !== null && this.props.playlistToMyGroups !== this.state.updatedPlaylist)
         {
             var groups = this.state.groups;
             groups.map((element, i) => {
-                if(element.playlists.length > 0)
+                if(element.playlists.length && element.groupname === this.state.selectedGroup)
                 {
                     var playlists = element.playlists;
                     playlists.map((playlist, index) => {
-                        if(playlist.name === this.props.updatedPlaylist.name)
+                        if(playlist.name === this.props.playlistToMyGroups.name)
                         {
-                            if(playlist.tracklist !== this.props.updatedPlaylist.tracklist)
+                            console.log("Old tracklist:", playlist.tracklist);
+                            console.log("to update with:", this.props.playlistToMyGroups.tracklist);
+                            if(playlist.tracklist !== this.props.playlistToMyGroups.tracklist)
                             {
-                                var newgroups = groups;
-                                newgroups[i].playlists[index].tracklist = this.props.updatedPlaylist.tracklist;
-                                this.setState({groups: newgroups});
                                 
+                                var newgroups = groups;
+                                newgroups[i].playlists[index].tracklist = this.props.playlistToMyGroups.tracklist;
+                                this.setState({groups: newgroups, updatedPlaylist: this.props.playlistToMyGroups});
                             }
                         }
                     });
@@ -50,7 +59,7 @@ class MyGroups extends React.Component{
             });
         }    
 
-        if(this.state.loggedIn = true && this.state.getgroups === true)
+        if(this.state.loggedIn === true && this.state.getgroups === true)
         {
             this.getAllgroups();
         }
@@ -71,8 +80,9 @@ class MyGroups extends React.Component{
     }
 
     handleSelectedPlaylist = (val) => {
-        this.props.getplaylist(val[0]);
-        this.props.getGroup(val[1]);
+        console.log("Selected playlist in MyGroups: ", `${val[0].name} from group: ${val[1]}`);
+        this.props.getplaylist(val[0], val[1]);
+        //this.props.getGroup(val[1]);
     }
 
     handleInputChange = (event) => {

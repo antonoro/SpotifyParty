@@ -112,16 +112,16 @@ router.post('/mydevices', (req, res) => {
     loggedinspotifyAPI.getMyDevices()
     .then(data => {
         var devicesArray = data.body.devices;
-        var computerIDs = [], index = 0;
+        var devices = [], index = 0;
         devicesArray.map((element, i) => {
             if(element.type === "Computer")
             {
-                computerIDs[index] = element.id;
+                devices[index] = {deviceid: element.id, devicename: element.name, devicetype: element.type, deviceactive: element.is_active};
                 index = index + 1; 
             }
         })
-        console.log("Computer IDs", computerIDs);
-        res.json(computerIDs[0]);
+        console.log("Computer devices: ", devices);
+        res.json(devices);
     });
 });
 
@@ -449,7 +449,7 @@ router.post('/addtracktoplaylist', (req,res) =>{
     mu.getOldPlaylist(req.body.uriTrack, req.body.playlist, req.body.group)
     .then( comboplaylists => {
         console.log("new playlists: ", comboplaylists[1]);
-        mu.updatePlaylist(req.body.playlist, comboplaylists[1])
+        mu.updatePlaylist(req.body.playlist, comboplaylists[1], req.body.group)
         .then(() => {
             res.json(comboplaylists[0]);
         })
