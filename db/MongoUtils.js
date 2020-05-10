@@ -37,6 +37,7 @@ function MongoUtils(){
             nowplaying: ""
         }).then(() => {
             console.log("Added!");
+            client.close();
         })
     ));
 
@@ -46,6 +47,7 @@ function MongoUtils(){
         .updateOne({groupname: `${group}`}, { $push: {members: `${member}`}})
         .then(() => {
             console.log("Added!");
+            client.close();
         })
     ));
 
@@ -55,6 +57,7 @@ function MongoUtils(){
         .updateOne({groupname: `${group}`}, { $push: {playlists: {name: `${playlistname}`, tracklist: []}}})
         .then(() => {
             console.log("Added!");
+            client.close();
             return('Done');
         })
     ));

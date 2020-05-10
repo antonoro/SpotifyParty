@@ -14,12 +14,25 @@ const spotifyAPI = new SpotifyWebAPI({
     redirectUri: process.env.REDIRECT_URI
 });
 
+var usersNumber = 0;
+var tokens = [];
+
 const scopes = ["user-read-currently-playing", "user-read-playback-state", "user-modify-playback-state", "user-read-email", "streaming"];
 
+router.get('/authorize', (req, res) => {
+    console.log("Login request, sending client id");
+    var sentID = usersNumber + 1;
+    usersNumber = usersNumber + 1;
+    res.json({userid: sentID});
+})
 
 //Login endpoint
-router.get('/login', (req, res) => {
-    console.log("Login received, redirecting to spotify");
+router.get('/login/:userid', (req, res) => {
+    
+    var actualID = parseInt(req.params.userid);
+    console.log("Login received, redirecting to spotify with client id:", actualID);
+    tokens[tokens.length] = [(actualID+1), "", ""];
+    console.log("Token in construction: ", tokens);
     const url = spotifyAPI.createAuthorizeURL(scopes);
     res.redirect(url+"&show_dialog=true");
 });
@@ -35,26 +48,68 @@ router.get("/logincallback/", async (req,res) => {
         console.log('The refresh token is ' + data.body['refresh_token']);
         spotifyAPI.setAccessToken(data.body['access_token']);
         spotifyAPI.setRefreshToken(data.body['refresh_token']);
-        
+        var updatedToken = tokens[tokens.length-1];
+        console.log('Token constructed:', updatedToken);
+        updatedToken[1] = data.body['access_token'];
+        updatedToken[2] = data.body['refresh_token'];
+        tokens[tokens.length-1] = updatedToken;
+        console.log('Token constructed:', tokens);
         res.redirect('/');
     }).catch(err => {console.log('error on Authorization Code Grant', err)});
     
 });
 
 // Update user endpoint
-router.get('/getUser', (req,res) => {
-    console.log("GetUser received");
-    console.log("Trying to send username");
-    spotifyAPI.getMe()
-    .then(data => {
-        res.json(data.body.display_name);
-    }).catch(err => {console.log('error getting user info from spotify')});
-    
+router.post('/getUser', (req,res) => {
+    var userID = req.body.userid;
+    console.log("GetUser received:", req.body.userid);
+    if(userID !== null)
+    {
+        console.log("Trying to send username");
+
+        var loggedinspotifyAPI = new SpotifyWebAPI({
+            clientId: process.env.CLIENT_ID,
+            clientSecret: process.env.CLIENT_SECRET,
+            redirectUri: process.env.REDIRECT_URI
+        });
+        tokens.map((element, index) => {
+            if(element[0] === userID)
+            {
+                loggedinspotifyAPI.setAccessToken(element[1]);
+                loggedinspotifyAPI.setRefreshToken(element[2]);
+            }
+        });
+
+        loggedinspotifyAPI.getMe()
+        .then(data => {
+            console.log("Got user with code:", data.statusCode);
+            res.json({displayname: data.body.display_name, statusCode: data.statusCode});
+        }).catch(err => {
+            console.log('error getting user info from spotify:', err);
+            res.json({statusCode: err.statusCode});
+        });
+    }
+    else{
+        res.json({statusCode: "tryagain"});
+    }
 });
 
-router.get('/mydevices', (req, res) => {
+router.post('/mydevices', (req, res) => {
+    var userID = req.body.userid;
     console.log("Get devices received");
-    spotifyAPI.getMyDevices()
+    var loggedinspotifyAPI = new SpotifyWebAPI({
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        redirectUri: process.env.REDIRECT_URI
+    });
+    tokens.map((element, index) => {
+        if(element[0] === userID)
+        {
+            loggedinspotifyAPI.setAccessToken(element[1]);
+            loggedinspotifyAPI.setRefreshToken(element[2]);
+        }
+    });
+    loggedinspotifyAPI.getMyDevices()
     .then(data => {
         var devicesArray = data.body.devices;
         var computerIDs = [], index = 0;
@@ -70,10 +125,23 @@ router.get('/mydevices', (req, res) => {
     });
 });
 
-router.get('/getplayback', (req, res) => {
+router.post('/getplayback', (req, res) => {
     console.log("GetPlayback received");
+    var userID = req.body.userid;
+    var loggedinspotifyAPI = new SpotifyWebAPI({
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        redirectUri: process.env.REDIRECT_URI
+    });
+    tokens.map((element, index) => {
+        if(element[0] === userID)
+        {
+            loggedinspotifyAPI.setAccessToken(element[1]);
+            loggedinspotifyAPI.setRefreshToken(element[2]);
+        }
+    });
     
-    spotifyAPI.getMyCurrentPlaybackState()
+    loggedinspotifyAPI.getMyCurrentPlaybackState()
     .then(data => {
         if(data.statusCode === 200 && data.body.item !== undefined)
         {
@@ -142,10 +210,23 @@ router.get('/previous', (req,res) =>{
     
 });
 
-router.get('/play', (req,res) =>{
+router.post('/play', (req,res) =>{
     console.log("Play song received");
+    var userID = req.body.userid;
+    var loggedinspotifyAPI = new SpotifyWebAPI({
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        redirectUri: process.env.REDIRECT_URI
+    });
+    tokens.map((element, index) => {
+        if(element[0] === userID)
+        {
+            loggedinspotifyAPI.setAccessToken(element[1]);
+            loggedinspotifyAPI.setRefreshToken(element[2]);
+        }
+    });
     
-    spotifyAPI.play()
+    loggedinspotifyAPI.play()
     .then(data => {
         if(data.statusCode === 204)
         {
@@ -159,10 +240,22 @@ router.get('/play', (req,res) =>{
     
 });
 
-router.get('/pause', (req,res) =>{
+router.post('/pause', (req,res) =>{
     console.log("Pause playback received");
-    
-    spotifyAPI.pause()
+    var userID = req.body.userid;
+    var loggedinspotifyAPI = new SpotifyWebAPI({
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        redirectUri: process.env.REDIRECT_URI
+    });
+    tokens.map((element, index) => {
+        if(element[0] === userID)
+        {
+            loggedinspotifyAPI.setAccessToken(element[1]);
+            loggedinspotifyAPI.setRefreshToken(element[2]);
+        }
+    });
+    loggedinspotifyAPI.pause()
     .then((data) => {
         if(data.statusCode === 204)
         {
@@ -180,7 +273,20 @@ router.post('/playsong', (req,res) =>{
     console.log("Play song received:", req.body);
     var uri = "spotify:track:"+req.body.uri;
     var deviceID = req.body.deviceID;
-    spotifyAPI.play({uris: [`${uri}`], device_id: `${deviceID}`})
+    var userID = req.body.userid;
+    var loggedinspotifyAPI = new SpotifyWebAPI({
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        redirectUri: process.env.REDIRECT_URI
+    });
+    tokens.map((element, index) => {
+        if(element[0] === userID)
+        {
+            loggedinspotifyAPI.setAccessToken(element[1]);
+            loggedinspotifyAPI.setRefreshToken(element[2]);
+        }
+    });
+    loggedinspotifyAPI.play({uris: [`${uri}`], device_id: `${deviceID}`})
     .then((data) => {
         if(data.statusCode === 204){
             console.log("Song playing");
@@ -196,10 +302,24 @@ router.post('/playsong', (req,res) =>{
 });
 
 router.post('/gettracksinfo', (req, res) =>{
-    console.log("Get track info received", req.body);
-    if(req.body !== [])
+
+    console.log("Get track info received", req.body.tracks);
+    var userID = req.body.userid;
+    var loggedinspotifyAPI = new SpotifyWebAPI({
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        redirectUri: process.env.REDIRECT_URI
+    });
+    tokens.map((element, index) => {
+        if(element[0] === userID)
+        {
+            loggedinspotifyAPI.setAccessToken(element[1]);
+            loggedinspotifyAPI.setRefreshToken(element[2]);
+        }
+    });
+    if(req.body.tracks !== [])
     {
-        spotifyAPI.getTracks(req.body)
+        loggedinspotifyAPI.getTracks(req.body.tracks)
         .then((data) => {
             if(data.statusCode === 200)
             {
@@ -233,17 +353,28 @@ router.get('/refreshaccesstoken', (req,res) =>{
 
 });
 
-router.get('/getallgroups', (req,res) =>{
+router.post('/getallgroups', (req,res) =>{
     console.log("Getting group info...");
-    
-    spotifyAPI.getMe()
+    var userID = req.body.userid;
+    var loggedinspotifyAPI = new SpotifyWebAPI({
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        redirectUri: process.env.REDIRECT_URI
+    });
+    tokens.map((element, index) => {
+        if(element[0] === userID)
+        {
+            loggedinspotifyAPI.setAccessToken(element[1]);
+            loggedinspotifyAPI.setRefreshToken(element[2]);
+        }
+    });
+    loggedinspotifyAPI.getMe()
     .then(data => {
         if(data.statusCode === 200)
         {
             var myemail = data.body.email;
             mu.getGroupsData(myemail)
             .then(arraydata =>{
-                console.log("array data", arraydata);
                 res.json(arraydata);
             });
         }
@@ -265,8 +396,20 @@ router.post('/createplaylist', (req,res) =>{
 });
 
 router.post('/creategroup', (req,res) =>{
-
-    spotifyAPI.getMe()
+    var userID = req.body.userid;
+    var loggedinspotifyAPI = new SpotifyWebAPI({
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        redirectUri: process.env.REDIRECT_URI
+    });
+    tokens.map((element, index) => {
+        if(element[0] === userID)
+        {
+            loggedinspotifyAPI.setAccessToken(element[1]);
+            loggedinspotifyAPI.setRefreshToken(element[2]);
+        }
+    });
+    loggedinspotifyAPI.getMe()
     .then(data => {
         if(data.statusCode === 200)
         {
@@ -301,6 +444,8 @@ router.post('/addtracktoplaylist', (req,res) =>{
     console.log("New track: ", req.body.uriTrack);
     console.log("In playlist: ", req.body.playlist);
     console.log("In group: ", req.body.group);
+    console.log("From user id:",req.body.userid);
+    
     mu.getOldPlaylist(req.body.uriTrack, req.body.playlist, req.body.group)
     .then( comboplaylists => {
         console.log("new playlists: ", comboplaylists[1]);
@@ -314,7 +459,20 @@ router.post('/addtracktoplaylist', (req,res) =>{
 
 router.post('/searchtracks', (req, res) => {
     console.log("Searching for tracks containing:", req.body.searchedTrack);
-    spotifyAPI.searchTracks(`${req.body.searchedTrack}`, { limit : 5})
+    var userID = req.body.userid;
+    var loggedinspotifyAPI = new SpotifyWebAPI({
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        redirectUri: process.env.REDIRECT_URI
+    });
+    tokens.map((element, index) => {
+        if(element[0] === userID)
+        {
+            loggedinspotifyAPI.setAccessToken(element[1]);
+            loggedinspotifyAPI.setRefreshToken(element[2]);
+        }
+    });
+    loggedinspotifyAPI.searchTracks(`${req.body.searchedTrack}`, { limit : 5})
     .then(data => {
         if(data.statusCode === 200)
         {

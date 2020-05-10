@@ -8,6 +8,7 @@ class Nextup extends React.Component{
         super(props);
         this.state = {
             group: '',
+            userID: null,
             playlist: null,
             playlistname: null,
             tracklist: [["", ""]],
@@ -35,6 +36,11 @@ class Nextup extends React.Component{
             }
         }
 
+        if(this.props.user !== null && this.state.userID !== this.props.userid)
+        {
+            this.setState({userID: this.props.userid});
+        }
+
         if(this.state.nextup !== this.props.nextup)
         {
             if(this.props.nextup < this.state.tracklist.length)
@@ -57,7 +63,7 @@ class Nextup extends React.Component{
         {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(tracklist),
+            body: JSON.stringify({tracks: tracklist, userid: this.state.userID}),
         }).then(res => res.json()
         .then(res => {
             console.log("Fetched tracks info:", res);
@@ -83,7 +89,7 @@ class Nextup extends React.Component{
         {
             fetch('/searchtracks', {
                 method:'POST',
-                body: JSON.stringify({searchedTrack: `${this.state.searchedTrack}`}),
+                body: JSON.stringify({searchedTrack: `${this.state.searchedTrack}`, userid: this.state.userID}),
                 headers: { 'Content-Type': 'application/json' },
             }).then(res => res.json())
             .then(resp => {
@@ -107,7 +113,7 @@ class Nextup extends React.Component{
         var uri = song.target.value.split(':');
         fetch("/addtracktoplaylist", {
             method:'POST',
-            body: JSON.stringify({uriTrack: `${uri[2]}`,playlist: `${this.state.playlistname}`, group: `${this.state.group}`}),
+            body: JSON.stringify({uriTrack: `${uri[2]}`,playlist: `${this.state.playlistname}`, group: `${this.state.group}`, userid: this.state.userID}),
             headers: { 'Content-Type': 'application/json' },
         }).then(res => res.json())
         .then(resp => {

@@ -8,6 +8,7 @@ class MyGroups extends React.Component{
         super(props);
         this.state = {
             user: null,
+            userID: null,
             loggedIn: false,
             getgroups: false,
             groups: null,
@@ -20,9 +21,9 @@ class MyGroups extends React.Component{
     }
 
     componentDidUpdate(){
-        if(this.props.user !== this.state.user && this.props.user !== null) // when user changes
+        if(this.props.user !== this.state.user && this.props.user !== null && this.state.userID !== this.props.userid) // when user changes
         {
-            this.setState({user: this.props.user, loggedIn: true, getgroups: true});
+            this.setState({user: this.props.user, loggedIn: true, getgroups: true, userID: this.props.userid});
             
         }
 
@@ -56,7 +57,11 @@ class MyGroups extends React.Component{
     }
 
     getAllgroups() {
-        fetch("/getallgroups")
+        fetch("/getallgroups", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({userid: this.state.userID}),
+        })
         .then(res => res.json()
         .then(res => {
             console.log("Res is: ", res);
@@ -104,7 +109,7 @@ class MyGroups extends React.Component{
             fetch('/creategroup', 
             {
                 method: 'POST', 
-                body: JSON.stringify({newgroup: `${this.state.newGroup}`}),
+                body: JSON.stringify({newgroup: `${this.state.newGroup}`, userid: this.state.userID}),
                 headers: { 'Content-Type': 'application/json' },
             }).then(res => res.json())
             .then(resp => {

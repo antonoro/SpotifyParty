@@ -24,15 +24,28 @@ class TopHeader extends React.Component{
         
         this.state = {
             user: null,
+            userid: null,
         };
     }
 
     componentDidMount() {
+        if(this.state.userid === null)
+        {
+            console.log("Requesting client id...");
+            fetch("/authorize")
+            .then(res => res.json()
+            .then(res => {
+                console.log("Fetched client ID:", res.userid);
+                this.setState({userid: res.userid});
+                console.log("client id:", this.state.userid);
+                this.props.getID(res.userid);
+            }));
+        }
         
     }
 
     componentDidUpdate() {
-        
+
         if(this.props.user !== this.state.user)
         {this.setState({user: this.props.user});}
         
@@ -50,9 +63,9 @@ class TopHeader extends React.Component{
                         <Nav.Link href="#home">Home</Nav.Link>
                         <Nav.Link href="#link">Link</Nav.Link>
                     </Nav>
-                    { this.state.user === null ?
+                    { (this.state.user === null) ?
                     <Nav className="ml-auto logintag">
-                        <Nav.Link href="/login">Login with Spotify</Nav.Link>
+                        <Nav.Link href={`/login/${this.state.userid}`}>Login with Spotify</Nav.Link>
                     </Nav>
                     :
                     <Nav className="ml-auto">
@@ -62,7 +75,7 @@ class TopHeader extends React.Component{
 
                             <NavDropdown.Item href="#">Preferences</NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item href="#">Log out</NavDropdown.Item>
+                            <NavDropdown.Item>Log out</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                     }

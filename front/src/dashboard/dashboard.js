@@ -10,6 +10,7 @@ class Dashboard extends React.Component{
         this.state = {
             user: null,
             deviceID: null,
+            userID: null,
             loggedIn: false,
             item: null,
             refreshToggled: false,
@@ -30,10 +31,15 @@ class Dashboard extends React.Component{
 
     componentDidUpdate(){
 
-        if(this.props.user !== this.state.user && this.props.user !== null && this.props.deviceID !== this.state.deviceID && this.props.deviceID !== null) // when user changes
+        if(this.state.userID !== null && this.props.user !== this.state.user && this.props.user !== null && this.props.deviceID !== this.state.deviceID && this.props.deviceID !== null) // when user changes
         {
             this.setState({user: this.props.user, loggedIn: true, deviceID: this.props.deviceID});
             this.getMusicInfo();
+        }
+
+        if(this.props.userid !== null && this.props.userid !== this.state.userID)
+        {
+            this.setState({userID: this.props.userid});
         }
 
         if(this.state.refreshToggled)
@@ -86,7 +92,11 @@ class Dashboard extends React.Component{
 
     getMusicInfo = () => {
         console.log("Fetching playback info...");
-        fetch("/getplayback")
+        fetch("/getplayback", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({userid: this.state.userID}),
+          })
         .then(res => res.json()
         .then(res => {
             console.log("res is:" , res);
@@ -105,7 +115,11 @@ class Dashboard extends React.Component{
     
     playpausePlayback = (action) => {
         console.log("Playing/pausing playback...");
-        fetch("/"+action)
+        fetch("/"+action, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({userid: this.state.userID}),
+          })
         .then(res => res.json()
         .then(res => {
             
@@ -126,7 +140,7 @@ class Dashboard extends React.Component{
         {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({uri: `${songuri}`, deviceID: `${this.state.deviceID}`}),
+            body: JSON.stringify({uri: `${songuri}`, deviceID: `${this.state.deviceID}`, userid: this.state.userID}),
         }).then(res => res.json()
         .then(res => {
             console.log(res);
@@ -237,7 +251,7 @@ class Dashboard extends React.Component{
                 <div id="mygroups" className="col-2 border-right border-top">
                     <div className="row justify-content-center">
                         <h2>My groups</h2>
-                        <MyGroups user={this.state.user} getplaylist={this.getSelectedPlaylist} getGroup={this.getSelectedGroup} updatedPlaylist={this.state.playlistDisplay}/>
+                        <MyGroups userid={this.state.userID} user={this.state.user} getplaylist={this.getSelectedPlaylist} getGroup={this.getSelectedGroup} updatedPlaylist={this.state.playlistDisplay}/>
                     </div>
                     
                 </div>
@@ -291,7 +305,7 @@ class Dashboard extends React.Component{
                         
                     </div>
                     <div>
-                        <Nextup playlist={this.state.playlistDisplay} getUpdatedPlaylist={this.addedSongtoPlaylist} group={this.state.group} nextup={this.state.iteratorPlaylist}/>
+                        <Nextup userid={this.state.userID} playlist={this.state.playlistDisplay} getUpdatedPlaylist={this.addedSongtoPlaylist} group={this.state.group} nextup={this.state.iteratorPlaylist}/>
                     </div>
                     
                 </div>

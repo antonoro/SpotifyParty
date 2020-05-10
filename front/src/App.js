@@ -8,29 +8,96 @@ class App extends React.Component {
   constructor(){
     super();
     this.state = {
-      loggedIn: false,
+      loggedin: false,
       userState: null,
       deviceID: null,
+      userID: null,
+      getUserToggled: false,
     };
   };
 
   componentDidMount(){
-    console.log("fetching getUser...");
-    fetch("/getUser")
-    .then(res => res.json()
-    .then(res => {
-      if(res !== this.state.userState)
+    if(this.state.loggedin !== true)
+    {
+      console.log("fetching getUser...");
+      fetch("/getUser", 
       {
-        console.log("Fetched!");
-        this.setState({userState: res});
-      }
-    }));
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({userid: this.state.userID}),
+      })
+      .then(res => res.json()
+      .then(res => {
+        if(res.statusCode === 200)
+        {
+          if(res.displayname !== this.state.userState)
+          {
+            console.log("Fetched!");
+            this.setState({userState: res.displayname, loggedin: true});
+          }
+        }
+        else{
+          console.log("Error code: ", res.statusCode);
+          if(res.statusCode === "tryagain")
+          {
+            this.setState({getUserToggled: true});
+          }
+        }
+        
+      }))
+      .catch(err =>{
+        console.log("Error with GetUser");
+      });
+    }
   }
 
   componentDidUpdate(){
-    if(this.state.deviceID === null)
+
+    if(this.state.getUserToggled ===  true)
     {
-      fetch("/mydevices")
+      setTimeout( () => {
+        
+      
+      console.log("fetching getUser...");
+      fetch("/getUser", 
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({userid: this.state.userID}),
+      })
+      .then(res => res.json()
+      .then(res => {
+        if(res.statusCode === 200)
+        {
+          if(res.displayname !== this.state.userState)
+          {
+            console.log("Fetched!");
+            this.setState({userState: res.displayname, loggedin: true, getUserToggled: false});
+          }
+        }
+        else{
+          console.log("Error code: ", res.statusCode);
+          if(res.statusCode === "tryagain")
+          {
+            this.setState({getUserToggled: true});
+          }
+        }
+        
+      }))
+      .catch(err =>{
+        console.log("Error with GetUser");
+      });
+
+      }, 500);
+    }
+
+    if(this.state.deviceID === null && this.state.loggedin ===  true)
+    {
+      fetch("/mydevices", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({userid: this.state.userID}),
+      })
       .then(res => res.json()
       .then(res => {
         if(res !== this.state.deviceID)
@@ -41,15 +108,19 @@ class App extends React.Component {
     }
   }
 
+  getID = (id) =>{
+    this.setState({userID: id});
+    console.log("App got client id:", this.state.userID);
+  }
 
   render()
   {  
     return (
       <div className="App">
 
-          <TopHeader user={this.state.userState}/>
+          <TopHeader user={this.state.userState} getID={this.getID}/>
         <div className="container-fluid">  
-          <Dashboard user={this.state.userState} deviceID={this.state.deviceID}/>
+          <Dashboard user={this.state.userState} deviceID={this.state.deviceID} userid={this.state.userID}/>
         </div>
         
         
