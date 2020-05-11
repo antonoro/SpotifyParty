@@ -116,6 +116,7 @@ class MyGroups extends React.Component{
         event.preventDefault();
         if(event.target.newGroup.value !== '')
         {
+            var newArchivegroup = this.state.newGroup;
             fetch('/creategroup', 
             {
                 method: 'POST', 
@@ -126,6 +127,18 @@ class MyGroups extends React.Component{
                 if(resp !== null)
                 {
                     this.setState({newGroup: '', getgroups: true});
+                    fetch('/creategroupmessages', 
+                    {
+                        method: 'POST', 
+                        body: JSON.stringify({group: `${newArchivegroup}`}),
+                        headers: { 'Content-Type': 'application/json' },
+                    }).then(res => res.json())
+                    .then(resp => {
+                        if(resp !== null)
+                        {
+                            console.log("Group chatarchive created");
+                        }
+                    })
                 }
             });
         }

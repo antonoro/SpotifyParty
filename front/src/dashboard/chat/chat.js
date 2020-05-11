@@ -10,7 +10,7 @@ function Chat(props) {
    
     const [err, setErr] = useState(null); 
     
-    const setupWS = () => {
+    const setupWS = (group) => {
         var chatSocket = new WebSocket("ws://localhost:3001");
 
         chatSocket.onopen = () => {
@@ -34,41 +34,39 @@ function Chat(props) {
     useEffect(() => {
         if(props.group !== '')
         {
+            setupWS(props.group);
             setAuthor(props.author);
             setGroup(props.group);
         }
     }, [props.group]);
 
     useEffect(() => {
-        setupWS();
-       
-        // fetch("/allgroupmessages", {
-        //     method:'POST', 
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({group: props.group}), 
-        // })
-        // .then((res) => res.json())
-        // .then((res) => {
-        //     if(!res.success)
-        //     {
-        //         console.log("No group registered");
-        //         return;
-        //     }
-        //     else{
-        //     console.log("Setting messageCollection", res.data.messages);
-        //     setMessages(res.data.messages);
-        //     }
-        // })
-        // .catch((err) => setErr(err));
-    }, []);
-
+        fetch("/allgroupmessages", {
+            method:'POST', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({group: props.group}), 
+        })
+        .then((res) => res.json())
+        .then((res) => {
+            if(!res.success)
+            {
+                console.log("No group registered");
+                return;
+            }
+            else{
+            console.log("Setting messageCollection", res.data.messages);
+            setMessages(res.data.messages);
+            }
+        })
+        .catch((err) => setErr(err));
+    }, [selectedGroup]);
 
     const sendMessage = (event) => {
         event.preventDefault();
         
         var group = event.target[0].value;
         var author = event.target[1].value;
-        var writtenmessage = event.target[1].value;
+        var writtenmessage = event.target[2].value;
 
         fetch("/sendchatmessage", 
         {
