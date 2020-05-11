@@ -11,6 +11,11 @@
     padding-left: 0; 
     padding-right: 0;
     padding-top: 2vh;
-    font-family: 'GothamNarrow-Black';
-    color: white;
+    font-family: 'GothamNarrow-Black' !important;
+    color: white !important;
+}
+
+.bigF{
+	 font-family: 'GothamNarrow-Black'!important;
+	 color: white !important;
 }

@@ -26,11 +26,16 @@
 
 .unique{
 	font-family: 'Gotham-Book' !important;
-  	color: white !important;
+  	color: black !important;
 }
 
 .white{
 	font-family: 'Gotham-Book' !important;
-  	color: white !important;
+  	color: black !important;
 
+}
+
+.myaccountTag{
+	color: white !important;
+	font-family: 'Gotham-Book' !important;
 }
