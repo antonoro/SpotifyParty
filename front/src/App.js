@@ -9,7 +9,7 @@ class App extends React.Component {
     super();
     this.state = {
       loggedin: false,
-      userState: null,
+      userState: '',
       deviceID: null,
       devicename: null,
       deviceactive: false,

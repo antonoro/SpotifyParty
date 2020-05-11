@@ -23,7 +23,7 @@ class TopHeader extends React.Component{
         super();
         
         this.state = {
-            user: null,
+            user: '',
             userid: null,
             devicename: null, 
             deviceactive: false,
@@ -70,7 +70,7 @@ class TopHeader extends React.Component{
                         <Nav.Link href="#home">Home</Nav.Link>
                         <Nav.Link href="#link">Link</Nav.Link>
                     </Nav>
-                    { (this.state.user === null) ?
+                    { (this.state.user === '') ?
                     <Nav className="ml-auto logintag">
                         <Nav.Link href={`/login/${this.state.userid}`}>Login with Spotify</Nav.Link>
                     </Nav>

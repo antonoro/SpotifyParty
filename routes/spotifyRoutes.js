@@ -482,7 +482,30 @@ router.post('/searchtracks', (req, res) => {
             res.json(null);
         }
     });
-})
+});
+
+router.post('/allgroupmessages', async (req, res) => {
+    console.log("Retrieving group messages for group: ", req.body.group);
+    if(req.body.group !== '')
+    {
+        mu.getSavedGroupMessages(req.body.group)
+        .then((datamessages) => {
+            res.json({success: true, data: datamessages});
+        })  
+    }
+    else{
+        res.json({success: false});
+    }
+});
+
+router.post('/sendchatmessage', (req, res) => {
+    console.log("Received chat message:", req.body);
+    mu.updateGroupMessages(req.body.writtenMessage, req.body.author, req.body.group)
+    .then( () => {
+        res.json("Done.");
+    } 
+    );
+});
 
 
 module.exports = router;

@@ -36,7 +36,7 @@ class Nextup extends React.Component{
             }
         }
 
-        if(this.props.user !== null && this.state.userID !== this.props.userid)
+        if(this.props.user !== '' && this.state.userID !== this.props.userid)
         {
             this.setState({userID: this.props.userid});
         }

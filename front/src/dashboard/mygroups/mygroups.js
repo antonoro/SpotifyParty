@@ -23,7 +23,7 @@ class MyGroups extends React.Component{
     }
 
     componentDidUpdate(){
-        if(this.props.user !== this.state.user && this.props.user !== null && this.state.userID !== this.props.userid) // when user changes
+        if(this.props.user !== this.state.user && this.props.user !== '' && this.state.userID !== this.props.userid) // when user changes
         {
             this.setState({user: this.props.user, loggedIn: true, getgroups: true, userID: this.props.userid});
             
