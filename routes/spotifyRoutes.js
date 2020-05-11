@@ -519,5 +519,4 @@ router.post('/creategroupmessages', (req, res) => {
     })
 })
 
-});
 module.exports = router;

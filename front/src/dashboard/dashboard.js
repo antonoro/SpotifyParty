@@ -262,14 +262,19 @@ class Dashboard extends React.Component{
                         <div className="col-6">
                             { (this.state.item === null || this.state.item === undefined ) ?
                                 <div>    
-                                    :
-                                    { this.state.playlistDisplay !== null ?
-                                        <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTriggerNext: true})}>Play Next</button>
-                                    :
-                                        <div>
-                                        </div>
-                                    }
-                                </div>
+                                <h2 className="nowP">Now Playing: [Nothing is playing]</h2>
+                                { this.state.user !== '' ?
+                                    <button className="btn btn-warning" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
+                                :
+                                    <div></div>
+                                }
+                                { this.state.playlistDisplay !== null ?
+                                    <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTriggerNext: true})}>Play Next</button>
+                                :
+                                    <div>
+                                    </div>
+                                }
+                            </div>
                             : 
                                 <div>
                                     <h2 className="nowP">Now Playing:</h2>
@@ -311,6 +316,7 @@ class Dashboard extends React.Component{
                     
                 </div>
                 <div id="chat" className="col-3">
+                <Chat group={this.state.group} author={this.state.user}/>
                 </div>
             </div>
         );

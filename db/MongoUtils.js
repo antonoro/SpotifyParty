@@ -105,10 +105,72 @@ function MongoUtils(){
             return('Done');
         }
     ));
-            .collection("groupChats")
 
+    mu.getGroupMessages = () => (
+        mu.connectreactive().then((client) => 
+            client.db(dbName)
+            .collection("groupChats")
+            .find({})
+            .toArray()
+            )
+            .finally((data) => {
+                console.log("Got group messages data");
+                client.close();
+                return data;
+            }
+    ));
+
+    mu.getSavedGroupMessages = (group) => mu.connect().then(client => (
+        client.db(dbName)
+        .collection(GroupChats)
+        .findOne({groupname: `${group}`})
         .then((data) => {
+            console.log("Got data!", data);
+            client.close();
+            return data ;
+        })
+    ));
+
+    mu.listenforChanges = (notifyAll) => {
+        console.log("Listening for changes");
+        return mu.connectreactive().then((client) => {
+            const cursor = client.db(dbName)
+            .collection("groupChats")
+            .watch();
+
+            cursor.on("change", (data) => {
+                console.log("Mongo got change:", data);
+                mu.getGroupMessages().then((groupdata) =>{
+                    notifyAll(JSON.stringify(groupdata));
+                });
+            });
+        });
+    }
+
+    mu.updateGroupMessages = (message, author, group) => mu.connect().then(client => (
+        client.db(dbName)
+        .collection(GroupChats)
+        .updateOne({groupname: `${group}`}, { $push: {messages: [`${message}`,`${author}`]}})
+        .then(() => {
+            console.log("Added!");
+            client.close();
+            return('Done');
+        })
+    ));
+
+    mu.createGroupMessages = (group) => mu.connect().then(client => (
+        client.db(dbName)
+        .collection(GroupChats)
+        .insertOne({groupname: `${group}`, messages: []})
+        .then(() => {
+            console.log("Added!");
+            client.close();
+            return('Done');
+        })
+    ));
+
     return mu;
+            
 }
 
 module.exports = MongoUtils();

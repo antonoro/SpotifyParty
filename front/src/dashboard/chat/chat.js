@@ -37,6 +37,7 @@ function Chat(props) {
             setupWS(props.group);
             setAuthor(props.author);
             setGroup(props.group);
+            setMessages([]);
         }
     }, [props.group]);
 
