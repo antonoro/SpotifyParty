@@ -260,9 +260,9 @@ class MyGroups extends React.Component{
                                     <form onSubmit={this.handleAddGroupSubmit}>
                                         <Form>
                                             <Form.Group>
-                                            <Form.Control onChange={this.handleInputChange} name="newGroup" type="text" placeholder="Enter name" value={this.state.newGroup}/>
+                                            <Form.Control className="input" onChange={this.handleInputChange} name="newGroup" type="text" placeholder="Enter name" value={this.state.newGroup}/>
                                             </Form.Group>
-                                            <Button variant="success" type="submit">
+                                            <Button className="btnAddPlaylist" variant="success" type="submit">
                                                 Create
                                             </Button>
                                         </Form>

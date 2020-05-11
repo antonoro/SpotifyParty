@@ -54,3 +54,24 @@
      font-family: 'GothamNarrow-Black';
     color: white;
 }
+
+.songName{
+    font-family: 'GothamNarrow-Black';
+    color: white;
+
+}
+
+
+.artistName{
+    color: white;
+    font-family: 'Gotham-Book';
+    font-style: italic; 
+
+}
+
+
+.albumName{
+    color: white;
+    font-family: 'Gotham-Book';
+    font-style: italic; 
+}

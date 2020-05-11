@@ -272,10 +272,10 @@ class Dashboard extends React.Component{
                                 </div>
                             : 
                                 <div>
-                                    <h2>Now Playing:</h2>
-                                    <h5>{this.state.item.name}</h5>
-                                    <h6>Artist: {this.state.item.artists[0].name}</h6>
-                                    <h6>Album: {this.state.item.album.name}</h6>
+                                    <h2 className="nowP">Now Playing:</h2>
+                                    <h5 className="songName">{this.state.item.name}</h5>
+                                    <h6 className="artistName">Artist: {this.state.item.artists[0].name}</h6>
+                                    <h6 className="albumName">Album: {this.state.item.album.name}</h6>
                                     
                                     <button className="btn btn-warning res" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
                                     { this.state.playback ?

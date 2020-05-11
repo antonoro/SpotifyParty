@@ -25,6 +25,12 @@
 }
 
 .unique{
-	font-family: 'Gotham-Book';
-  	color: white;
+	font-family: 'Gotham-Book' !important;
+  	color: white !important;
+}
+
+.white{
+	font-family: 'Gotham-Book' !important;
+  	color: white !important;
+
 }

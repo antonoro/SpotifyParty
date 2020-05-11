@@ -19,4 +19,15 @@
     background-color: #3B25F5;
     color: white;
     font-family: 'Gotham-Book';
+    border: none;
+}
+
+.btnAddPlaylist:hover {
+    background-color: white;
+    color:  #3B25F5;
+    border: none;
+}
+
+.input{
+    font-family: 'Gotham-Book';
 }

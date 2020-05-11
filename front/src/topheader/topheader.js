@@ -64,7 +64,7 @@ class TopHeader extends React.Component{
         
         return (
             
-            <Navbar className="topheader"  expand="lg">
+            <Navbar  className="topheader"  expand="lg">
                 <Navbar.Brand className="brandLogo" href="/"><img className="logo" alt="logo" src={logo}/></Navbar.Brand>
                 <Navbar.Toggle bg="light" aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse bg="light" id="basic-navbar-nav">
@@ -72,17 +72,17 @@ class TopHeader extends React.Component{
                     </Nav>
                     { (this.state.user === null) ?
                     <Nav className="ml-auto logintag">
-                        <Nav.Link className="topheader unique" href={`/login/${this.state.userid}`}>Login with Spotify</Nav.Link>
+                        <Nav.Link className="topheader unique white" href={`/login/${this.state.userid}`}>Login with Spotify</Nav.Link>
                     </Nav>
                     :
-                    <Nav className="ml-auto">
+                    <Nav bg="light" className="ml-auto">
                         <NavDropdown className="myaccountTag" title="My Account" id="basic-nav-dropdown">
 
-                            <NavDropdown.Item>Hello, {this.state.user}</NavDropdown.Item>
+                            <NavDropdown.Item className="white">Hello, {this.state.user}</NavDropdown.Item>
 
-                            <NavDropdown.Item>Device name: {this.state.devicename}</NavDropdown.Item>
+                            <NavDropdown.Item className="white">Device name: {this.state.devicename}</NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item href="/">Log out</NavDropdown.Item>
+                            <NavDropdown.Item className="white" href="/">Log out</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                     } 

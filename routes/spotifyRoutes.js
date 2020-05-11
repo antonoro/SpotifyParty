@@ -129,15 +129,18 @@ router.post('/mydevices', (req, res) => {
 router.post('/getplayback', (req, res) => {
     console.log("GetPlayback received");
     var userID = req.body.userid;
+    console.log(userID);
     var loggedinspotifyAPI = new SpotifyWebAPI({
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
         redirectUri: process.env.REDIRECT_URI
     });
+    console.log("ESTTATTATATATATTA");
     tokens.map((element, index) => {
-        if(element[0] === userID)
+        console.log(element[0])
+        if(element[0] + 1 === userID)
         {
-            console.log("llegar");
+            console.log("llegarAAAAAAAAAAAAAA");
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);
         }
