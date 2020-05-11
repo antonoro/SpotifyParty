@@ -34,10 +34,9 @@ class App extends React.Component {
             }));
     }
     
-    console.log("entra");
     if(this.state.loggedin !== true)
     {
-      console.log("fetching getUser...");
+      console.log("fetching getUser on mount...");
       fetch("/getUser", 
       {
         method: 'POST',
@@ -50,7 +49,7 @@ class App extends React.Component {
         {
           if(res.displayname !== this.state.userState)
           {
-            console.log("Fetched!");
+            console.log("Fetched!", res.displayname);
             this.setState({userState: res.displayname, loggedin: true});
           }
         }
@@ -72,7 +71,7 @@ class App extends React.Component {
   componentDidUpdate(){
 
 
-    if(this.state.getUserToggled)
+    if(this.state.getUserToggled && !this.state.loggedin)
     {
       setTimeout( () => {
         
@@ -90,7 +89,7 @@ class App extends React.Component {
         {
           if(res.displayname !== this.state.userState)
           {
-            console.log("Fetched!");
+            console.log("Fetched!:", res.displayname);
             this.setState({userState: res.displayname, loggedin: true, getUserToggled: false});
           }
         }
@@ -112,6 +111,8 @@ class App extends React.Component {
 
     if(this.state.deviceID === null && this.state.loggedin ===  true)
     {
+      console.log("Device id:", this.state.deviceid);
+      console.log("Logged in:", this.state.loggedin);
       fetch("/mydevices", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -126,9 +127,9 @@ class App extends React.Component {
         else{
           console.log("Device found: ", res[0]);
           if(res[0].deviceid !== this.state.deviceID)
-        {
-          this.setState({deviceID: res[0].deviceid, devicename: res[0].devicename, deviceactive: res[0].deviceactive});
-        }
+          {
+            this.setState({deviceID: res[0].deviceid, devicename: res[0].devicename, deviceactive: res[0].deviceactive});
+          }
         }
         
       }));

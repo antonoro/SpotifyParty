@@ -22,6 +22,14 @@
     border: none;
 }
 
+.labelPlaylist {
+    margin-top: 1em;
+    background-color: #393A51;
+    color: white;
+    font-family: 'Gotham-Book';
+    border: none;
+}
+
 .btnAddPlaylist:hover {
     background-color: white;
     color:  #3B25F5;

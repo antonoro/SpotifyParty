@@ -133,7 +133,7 @@ class Nextup extends React.Component{
                         <h3 className="bigF">Next up: {this.state.tracklist[this.state.nextup][0]} - {this.state.tracklist[this.state.nextup][1]}</h3>
                         <label>Playlist name: {this.state.playlistname} Group: {this.state.group}</label>
                         <Table striped border>
-                            <thead>
+                            <thead className="nextup">
                                 <th>#</th>
                                 <th>Song</th>
                                 <th>Artist</th>
@@ -142,7 +142,7 @@ class Nextup extends React.Component{
                             </thead>
                             <tbody>
                             {this.state.tracklist.map((element, index) => {
-                                return(<tr>
+                                return(<tr className="nextup">
                                     <td>{index+1}</td>
                                     <td>{element[0]}</td>
                                     <td>{element[1]}</td>
@@ -169,8 +169,8 @@ class Nextup extends React.Component{
                             </div>
                             <button className="btn btn-success mb-2" type="submit">Search</button>
                         </form>
-                        <Table striped border>
-                            <thead>
+                        <Table striped border className="nextup">
+                            <thead >
                                 <th>Song</th>
                                 <th>Artist</th>
                                 <th>Album</th>

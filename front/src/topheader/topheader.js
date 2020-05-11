@@ -72,11 +72,11 @@ class TopHeader extends React.Component{
                     </Nav>
                     { (this.state.user === null) ?
                     <Nav className="ml-auto logintag">
-                        <Nav.Link className="topheader unique white" href={`/login/${this.state.userid}`}>Login with Spotify</Nav.Link>
+                        <Nav.Link  className="topheader unique white" href={`/login/${this.state.userid}`}>Login with Spotify</Nav.Link>
                     </Nav>
                     :
                     <Nav bg="light" className="ml-auto">
-                        <NavDropdown className="myaccountTag" title="My Account" id="basic-nav-dropdown">
+                        <NavDropdown alignRight className="myaccountTag" title="My Account" id="dropdown-menu-align-right">
 
                             <NavDropdown.Item className="white">Hello, {this.state.user}</NavDropdown.Item>
 

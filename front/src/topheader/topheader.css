@@ -3,7 +3,8 @@
 }
 
 .myaccountTag {
-    padding-right: 2em;
+	padding-right: 2em;
+
 }
 
 .logintag {
@@ -38,4 +39,8 @@
 .myaccountTag{
 	color: white !important;
 	font-family: 'Gotham-Book' !important;
+}
+
+#dropdown-menu-align-right {
+	color: white !important;
 }

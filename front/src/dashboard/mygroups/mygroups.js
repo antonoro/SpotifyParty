@@ -198,7 +198,7 @@ class MyGroups extends React.Component{
                                                             </Card.Body>
                                                         </Accordion.Collapse>
                                                     </Accordion>
-                                                    <h4 className="btnAddPlaylist">Playlists</h4>
+                                                    <h4 className="labelPlaylist">Playlists</h4>
                                                     <div id="fixedspacing">
                                                         <p></p>
                                                     </div>
