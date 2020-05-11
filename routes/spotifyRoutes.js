@@ -421,7 +421,7 @@ router.post('/creategroup', (req,res) =>{
             console.log("New group: ", req.body.newgroup);
             mu.insertNewGroup(req.body.newgroup, myemail)
             .then(() => {
-                res.json('Done');
+                res.json("Done!");
             });
         }
         else{
@@ -486,7 +486,7 @@ router.post('/searchtracks', (req, res) => {
             res.json(null);
         }
     });
-})
+});
 
 router.post('/allgroupmessages', async (req, res) => {
     console.log("Retrieving group messages for group: ", req.body.group);
@@ -519,4 +519,5 @@ router.post('/creategroupmessages', (req, res) => {
     })
 })
 
+});
 module.exports = router;

@@ -8,10 +8,6 @@ var app = require('../app');
 var debug = require('debug')('spotifyparty:server');
 var http = require('http');
 
-const mu = require("../db/MongoUtils.js");
-
-
-const wsu = require("../db/wsUtils.js");
 
 /**
  * Get port from environment and store in Express.
