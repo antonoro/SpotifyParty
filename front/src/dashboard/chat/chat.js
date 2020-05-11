@@ -11,7 +11,7 @@ function Chat(props) {
     const [err, setErr] = useState(null); 
     
     const setupWS = (group) => {
-        var chatSocket = new WebSocket("ws://localhost:3001");
+        var chatSocket = new WebSocket("ws://thespotifyparty.herokuapp.com:3001");
 
         chatSocket.onopen = () => {
             console.log("WS client connected");
