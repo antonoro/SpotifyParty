@@ -15,7 +15,8 @@
     "mongodb": "^3.5.7",
     "morgan": "~1.9.1",
     "nodemon": "^2.0.3",
-    "spotify-web-api-node": "^4.0.0"
+    "spotify-web-api-node": "^4.0.0",
+    "ws": "^7.3.0"
   },
   "devDependencies": {
     "eslint-config-prettier": "^6.11.0",

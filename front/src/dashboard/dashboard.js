@@ -1,5 +1,6 @@
 import React from 'react';
 import MyGroups from './mygroups/mygroups.js';
+import Chat from './chat/chat.js'
 import Nextup from './nextup/nextup.js';
 import './dashboard.css'
 
@@ -8,7 +9,7 @@ class Dashboard extends React.Component{
     constructor(props){
         super();
         this.state = {
-            user: null,
+            user: '',
             deviceID: null,
             userID: null,
             loggedIn: false,
@@ -32,7 +33,7 @@ class Dashboard extends React.Component{
 
     componentDidUpdate(){
 
-        if(this.state.userID !== null && this.props.user !== this.state.user && this.props.user !== null && this.props.deviceID !== this.state.deviceID && this.props.deviceID !== null) // when user changes
+        if(this.state.userID !== null && this.props.user !== this.state.user && this.props.user !== '' && this.props.deviceID !== this.state.deviceID && this.props.deviceID !== null) // when user changes
         {
             this.setState({user: this.props.user, loggedIn: true, deviceID: this.props.deviceID});
             this.getMusicInfo();
@@ -262,7 +263,11 @@ class Dashboard extends React.Component{
                             { (this.state.item === null || this.state.item === undefined) ?
                                 <div>    
                                     <h2 className="nowP">Now Playing: [Nothing is playing]</h2>
-                                    <button className="btn btn-warning res" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
+                                    { this.state.user !== '' ?
+                                        <button className="btn btn-warning" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
+                                    :
+                                        <div></div>
+                                    }
                                     { this.state.playlistDisplay !== null ?
                                         <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTriggerNext: true})}>Play Next</button>
                                     :
@@ -310,8 +315,8 @@ class Dashboard extends React.Component{
                     </div>
                     
                 </div>
-                <div id="chat" className="col-3 ">
-                    <h2 className="chat">Chat</h2>
+                <div id="chat" className="col-3">
+                    <Chat group={this.state.group} author={this.state.user}/>
                 </div>
             </div>
         );

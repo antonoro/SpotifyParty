@@ -1,0 +1,11 @@
+.tablechat {
+    width: 100%;
+}
+
+#chatbox {
+    min-height: 50vh;
+}
+
+.chat {
+    font-family: 'Playfair Display', serif;
+}

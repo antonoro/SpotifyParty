@@ -7,7 +7,7 @@ class MyGroups extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            user: null,
+            user: '',
             userID: null,
             loggedIn: false,
             getgroups: false,
@@ -23,7 +23,7 @@ class MyGroups extends React.Component{
     }
 
     componentDidUpdate(){
-        if(this.props.user !== this.state.user && this.props.user !== null && this.state.userID !== this.props.userid) // when user changes
+        if(this.props.user !== this.state.user && this.props.user !== '' && this.state.userID !== this.props.userid) // when user changes
         {
             this.setState({user: this.props.user, loggedIn: true, getgroups: true, userID: this.props.userid});
             
@@ -116,6 +116,7 @@ class MyGroups extends React.Component{
         event.preventDefault();
         if(event.target.newGroup.value !== '')
         {
+            var newArchivegroup = this.state.newGroup;
             fetch('/creategroup', 
             {
                 method: 'POST', 
@@ -126,6 +127,18 @@ class MyGroups extends React.Component{
                 if(resp !== null)
                 {
                     this.setState({newGroup: '', getgroups: true});
+                    fetch('/creategroupmessages', 
+                    {
+                        method: 'POST', 
+                        body: JSON.stringify({group: `${newArchivegroup}`}),
+                        headers: { 'Content-Type': 'application/json' },
+                    }).then(res => res.json())
+                    .then(resp => {
+                        if(resp !== null)
+                        {
+                            console.log("Group chatarchive created");
+                        }
+                    })
                 }
             });
         }

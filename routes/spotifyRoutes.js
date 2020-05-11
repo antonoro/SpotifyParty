@@ -488,5 +488,35 @@ router.post('/searchtracks', (req, res) => {
     });
 })
 
+router.post('/allgroupmessages', async (req, res) => {
+    console.log("Retrieving group messages for group: ", req.body.group);
+    if(req.body.group !== '')
+    {
+        mu.getSavedGroupMessages(req.body.group)
+        .then((datamessages) => {
+            res.json({success: true, data: datamessages});
+        })  
+    }
+    else{
+        res.json({success: false});
+    }
+});
+
+router.post('/sendchatmessage', (req, res) => {
+    console.log("Received chat message:", req.body);
+    mu.updateGroupMessages(req.body.writtenmessage, req.body.author, req.body.group)
+    .then( () => {
+        res.json("Done.");
+    } 
+    );
+});
+
+router.post('/creategroupmessages', (req, res) => {
+    console.log("Creating group chat archive", req.body.group);
+    mu.createGroupMessages(req.body.group)
+    .then(() => {
+        res.json('Done');
+    })
+})
 
 module.exports = router;

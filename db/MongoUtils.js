@@ -3,11 +3,16 @@ const MongoClient = require("mongodb").MongoClient;
 const dotenv = require('dotenv').config();
 
 function MongoUtils(){
-    const mu = {}, dbName = "PartyData", GroupColl = "groupParties";
+    const mu = {}, dbName = "PartyData", GroupColl = "groupParties", GroupChats = "groupChats";
     const url = process.env.MONGO_URI;
 
     mu.connect = () => {
         client = new MongoClient(url, {useUnifiedTopology: true});
+        return client.connect();
+    }
+
+    mu.connectreactive = () => {
+        client = new MongoClient(url, {useUnifiedTopology: true, useNewUrlParser: true});
         return client.connect();
     }
     
@@ -101,7 +106,69 @@ function MongoUtils(){
         }
     ));
     
+    mu.getGroupMessages = () => (
+        mu.connectreactive().then((client) => 
+            client.db(dbName)
+            .collection("groupChats")
+            .find({})
+            .toArray()
+            )
+            .finally((data) => {
+                console.log("Got group messages data");
+                client.close();
+                return data;
+            }
+    ));
 
+    mu.getSavedGroupMessages = (group) => mu.connect().then(client => (
+        client.db(dbName)
+        .collection(GroupChats)
+        .findOne({groupname: `${group}`})
+        .then((data) => {
+            console.log("Got data!", data);
+            client.close();
+            return data ;
+        })
+    ));
+
+    mu.listenforChanges = (notifyAll) => {
+        console.log("Listening for changes");
+        return mu.connectreactive().then((client) => {
+            const cursor = client.db(dbName)
+            .collection("groupChats")
+            .watch();
+
+            cursor.on("change", (data) => {
+                console.log("Mongo got change:", data);
+                mu.getGroupMessages().then((groupdata) =>{
+                    notifyAll(JSON.stringify(groupdata));
+                });
+            });
+        });
+    }
+
+    mu.updateGroupMessages = (message, author, group) => mu.connect().then(client => (
+        client.db(dbName)
+        .collection(GroupChats)
+        .updateOne({groupname: `${group}`}, { $push: {messages: [`${message}`,`${author}`]}})
+        .then(() => {
+            console.log("Added!");
+            client.close();
+            return('Done');
+        })
+    ));
+
+    mu.createGroupMessages = (group) => mu.connect().then(client => (
+        client.db(dbName)
+        .collection(GroupChats)
+        .insertOne({groupname: `${group}`, messages: []})
+        .then(() => {
+            console.log("Added!");
+            client.close();
+            return('Done');
+        })
+    ));
+    
     return mu;
 }
 
