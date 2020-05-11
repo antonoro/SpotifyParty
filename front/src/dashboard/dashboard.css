@@ -1,17 +1,18 @@
 #mygroups {
-    background-color: whitesmoke;
+    background-color: #3D3E57;
     min-height: 93vh;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Gotham-Book';
+    color: white;
     padding-top: 4vh;
 }
 
 #mainrow {
     min-height: 93vh;
-    background-color: whitesmoke;
+    background-color: #2C2C3B;
 }
 
 .nowplaying {
-    background-color: whitesmoke;
+    background-color: #2C2C3B;
     font-family: 'Playfair Display', serif;
     min-height: 47vh;
     padding-top: 4vh;
@@ -20,7 +21,36 @@
 }
 
 #chat {
-    background-color: whitesmoke;
+    background-color: #2C2C3B;
     padding-top: 4vh;
     min-height: 93vh;
+}
+
+.titleGroup{
+    font-family: 'GothamNarrow-Black';
+    color: white;
+}
+
+.nowP{
+    font-family: 'GothamNarrow-Ultra';
+    color: white;
+}
+
+.res{
+    background-color: #3B25F5;
+    border: none;
+    color: white;
+    font-family: 'Gotham-Book';
+}
+
+.res:hover{
+    background-color: white;
+    color:#3B25F5;
+    border: none;
+}
+
+
+.chat{
+     font-family: 'GothamNarrow-Black';
+    color: white;
 }

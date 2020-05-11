@@ -3,6 +3,8 @@ import { Navbar, Button, Form, FormControl, NavDropdown, Nav } from 'react-boots
 import './topheader.css';
 import hash from "../hash";
 import * as $ from "jquery";
+import logo from './img/logoW.svg'
+
 
 const authEndpoint = "https://accounts.spotify.com/authorize";
 
@@ -62,17 +64,15 @@ class TopHeader extends React.Component{
         
         return (
             
-            <Navbar className="topheader" bg="light" expand="lg">
-                <Navbar.Brand className="brandLogo" href="/">Spotify Party</Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
+            <Navbar className="topheader"  expand="lg">
+                <Navbar.Brand className="brandLogo" href="/"><img className="logo" alt="logo" src={logo}/></Navbar.Brand>
+                <Navbar.Toggle bg="light" aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse bg="light" id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        <Nav.Link href="#home">Home</Nav.Link>
-                        <Nav.Link href="#link">Link</Nav.Link>
                     </Nav>
                     { (this.state.user === null) ?
                     <Nav className="ml-auto logintag">
-                        <Nav.Link href={`/login/${this.state.userid}`}>Login with Spotify</Nav.Link>
+                        <Nav.Link className="topheader unique" href={`/login/${this.state.userid}`}>Login with Spotify</Nav.Link>
                     </Nav>
                     :
                     <Nav className="ml-auto">
@@ -85,13 +85,7 @@ class TopHeader extends React.Component{
                             <NavDropdown.Item href="/">Log out</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
-                    }
-                    
-
-                    <Form inline className="searchButton">
-                    <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                    <Button  variant="outline-success">Search</Button>
-                    </Form>
+                    } 
                 </Navbar.Collapse>
             </Navbar>
             

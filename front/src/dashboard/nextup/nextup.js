@@ -24,7 +24,7 @@ class Nextup extends React.Component{
         { 
             var urilist = [];
             this.props.playlist.tracklist.map((element,i) => {
-                    urilist[i] = element;
+                return  urilist[i] = element;
             });
             this.setState({playlist: this.props.playlist, playlistname: this.props.playlist.name, group: this.props.group});
             if(urilist.length > 0)
@@ -69,7 +69,7 @@ class Nextup extends React.Component{
             console.log("Fetched tracks info:", res);
             var tracks = [];
             res.map((track, i) => {
-                tracks[i] = [track.name, track.artists[0].name, track.album.name, `${(Math.floor(track.duration_ms/60000)).toFixed(0)}:${((track.duration_ms/1000)%60).toFixed(0)}`, track.uri];
+                return tracks[i] = [track.name, track.artists[0].name, track.album.name, `${(Math.floor(track.duration_ms/60000)).toFixed(0)}:${((track.duration_ms/1000)%60).toFixed(0)}`, track.uri];
             });
             console.log("Tracks:", tracks);
             this.setState({tracklist: tracks});
@@ -98,7 +98,7 @@ class Nextup extends React.Component{
                     console.log("Returned tracks:", resp.items);
                     var tracks = [];
                     resp.items.map((track, index) => {
-                        tracks[index] = [track.name, track.artists[0].name, track.album.name, track.uri];
+                        return tracks[index] = [track.name, track.artists[0].name, track.album.name, track.uri];
                     })
                     this.setState({foundTracks: tracks, searchedTrack: ''});
                     console.log("tracks: ", this.state.foundTracks);
@@ -126,8 +126,8 @@ class Nextup extends React.Component{
     render() {
 
         return (
-            <div className="row nextupAddsong border" style={{}}>
-                <div className="col-6 border-right">
+            <div className="row nextupAddsong" style={{}}>
+                <div className="col-6">
                 { this.state.playlist !== null ?
                     <div className="nextup">
                         <h3>Next up: {this.state.tracklist[this.state.nextup][0]} - {this.state.tracklist[this.state.nextup][1]}</h3>
@@ -164,7 +164,7 @@ class Nextup extends React.Component{
                     { this.state.playlist !== null ?
                     <div>
                         <form class="form-inline justify-content-center" onSubmit={this.searchSubmit}>
-                            <div class="form-group mb-2">
+                            <div class="form-group mb-2 ">
                                 <input onChange={this.handleInputChange} className="form-control" name="searchedTrack" value={this.state.searchedTrack} type="text" placeholder="Search song..."/>
                             </div>
                             <button className="btn btn-success mb-2" type="submit">Search</button>

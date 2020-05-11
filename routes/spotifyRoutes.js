@@ -14,6 +14,7 @@ const spotifyAPI = new SpotifyWebAPI({
     redirectUri: process.env.REDIRECT_URI
 });
 
+
 var usersNumber = 0;
 var tokens = [];
 
@@ -136,6 +137,7 @@ router.post('/getplayback', (req, res) => {
     tokens.map((element, index) => {
         if(element[0] === userID)
         {
+            console.log("llegar");
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);
         }

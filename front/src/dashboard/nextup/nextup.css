@@ -1,12 +1,16 @@
 .nextupAddsong {
-    background-color: whitesmoke;
+    background-color: #2C2C3B;
+
     min-height: 46vh;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Gotham-Book';
     text-align: center;
+    color: white;
 }
 
 .nextup {
     padding-left: 0; 
     padding-right: 0;
     padding-top: 2vh;
+    font-family: 'GothamNarrow-Black';
+    color: white;
 }

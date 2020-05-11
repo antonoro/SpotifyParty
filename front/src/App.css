@@ -6,3 +6,261 @@
   font-family: 'Righteous', cursive;
 }
 
+@font-face {
+  font-family: 'Gotham-Light';
+  src: local('Gotham-Light'), url(./fonts/Gotham-Light.otf);
+}
+
+@font-face {
+  font-family: 'Gotham-Book';
+  src: local('Gotham-Book'), url(./fonts/Gotham-Book.otf);
+}
+
+@font-face {
+  font-family: 'GothamNarrow-Black';
+  src: local('GothamNarrow-Black'), url(./fonts/GothamNarrow-Black.otf);
+}
+
+@font-face {
+  font-family: 'Gotham-Ultra';
+  src: local('Gotham-Ultra'), url(./fonts/Gotham-Ultra.otf);
+}
+
+@font-face {
+  font-family: 'GothamNarrow-Ultra';
+  src: local('GothamNarrow-Ultra'), url(./fonts/GothamNarrow-Ultra.otf);
+}
+
+
+.App {
+ min-height: 100vh;
+}
+
+.Home{
+  background-image: url("./img/logoW.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  color: #3B25F5;
+  background-color: #3B25F5;
+  border-width: 0px;
+  width: 130px;
+  height: 80px
+}
+
+.Plus{
+  background-image: url("./img/try2.svg");
+  background-repeat: round;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background-size:200px 125px;
+  background-color: #3B25F5;
+    min-height: 100vh;
+
+
+}
+
+
+.App-header {
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  font-family: 'Gotham-light';
+  min-height: 10vh;
+  align-items: center;
+}
+
+.Register{
+  font-family: 'Gotham-Book';
+  color: white;
+  background-color: #3B25F5;
+  font-size: 16px;
+  padding: 12px 12px 12px 12px;
+  border: 2px solid white;
+  transition: 0.3s;
+
+}
+
+.Register:hover{
+  background-color: white;
+  color: #3B25F5;
+  border: 2px solid #3B25F5;
+}
+
+.Login{
+  font-family: 'Gotham-Book';
+  color: white;
+  background-color: #3B25F5;
+  font-size: 16px;
+  margin-right: 10px;
+  padding: 12px 12px 12px 12px;
+  border: 2px solid white;
+  transition: 0.4s;
+}
+
+.Login:hover{
+  background-color: white;
+  color: #3B25F5;
+  border: 2px solid #3B25F5;
+}
+
+.MiddleTitle{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 3;
+  min-height: 70vh;
+
+}
+
+.Black{
+  font-family: 'GothamNarrow-Black';
+  background-color: black;
+  color: white;
+  margin: 0px;
+  padding: 10px 10px 10px 10px;
+  transform: rotate(-5deg);
+  margin-bottom: 10px;
+
+}
+
+.Title{
+  font-family: 'GothamNarrow-Ultra';
+  color: white;
+  font-size: 70px;
+  margin: 0px;
+  transform: rotate(-5deg);
+  letter-spacing: 2px;
+  line-height: 0.8;
+}
+
+.Outline{
+  text-shadow: 0 0 2px white, 0 0 2px white, 0 0 2px white, 0 0 2px white; 
+  color: #3B25F5;
+}
+
+.Vynil{
+  position: relative;
+  height: 200px;
+  right: 1vh;
+  z-index: 2;
+}
+
+.Record{
+  height: 200px;
+  position: relative;
+  top: -160px;
+  left: -100px;
+  z-index: 1;
+  animation:spin 6s linear infinite;
+}
+
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } } 
+
+
+
+.Button {
+  top:-120px;
+  background-color: Transparent;
+  border:none;
+  position: relative;
+  display: inline-block;
+  width: 25.6em;
+  height: 6.3em;
+  overflow: hidden;
+  vertical-align: middle;
+  text-align: left;
+  text-decoration: none;
+  line-height: 3em;
+  font-size: 1rem;
+  cursor: pointer;
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+  -webkit-transition: -webkit-transform 0.5s;
+  transition: -webkit-transform 0.5s;
+  transition: transform 0.5s;
+  transition: transform 0.5s, -webkit-transform 0.5s;
+}
+.Button svg {
+  height: 65px;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.Button svg g line,
+.Button svg g polyline,
+.Button svg g circle {
+  fill: none;
+  stroke: #fff;
+}
+.Button svg g line,
+.Button svg g polyline {
+  stroke-miterlimit: 10;
+}
+.Button svg g circle {
+  display: block;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 0.066em;
+  stroke-dasharray: 200;
+  stroke-dashoffset: 0;
+  -webkit-transition: stroke-dashoffset ease-out 0.5s;
+  transition: stroke-dashoffset ease-out 0.5s;
+}
+.Button font {
+  color: white;
+  z-index: 2;
+  position: relative;
+  display: inline-block;
+  text-transform: uppercase;
+  font-family: "Gotham-Book";
+  font-size: 18px;
+}
+.Button:hover {
+  -webkit-transform: translateZ(0) translateX(0.5em);
+          transform: translateZ(0) translateX(0.5em);
+}
+.Button:hover svg g circle {
+  stroke-dashoffset: 200;
+}
+
+
+.Foot{
+  position: relative;
+  top: -50px;
+  padding-left: 40px;
+  padding-right: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.About{
+  background-color: #3B25F5;
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-family: 'Gotham-Book';
+  margin: 0px;
+}
+
+.Copyright{
+  color: white;
+  font-size: 16px;
+  font-family: 'Gotham-Book';
+  margin: 0px;
+  background-color: #3B25F5;
+
+}
+

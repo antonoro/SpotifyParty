@@ -15,6 +15,16 @@
 }
 
 .topheader {
-    
-    font-family: 'Righteous', cursive;
+  	font-family: 'Gotham-Book';
+  	color: white;
+    background-color: #37384D;
+}
+
+.logo{
+	width: 100px;
+}
+
+.unique{
+	font-family: 'Gotham-Book';
+  	color: white;
 }

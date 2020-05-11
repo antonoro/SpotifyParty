@@ -2,6 +2,8 @@ import React from 'react';
 import TopHeader from './topheader/topheader';
 import Dashboard from './dashboard/dashboard';
 import './App.css';
+import Vynil from './img/vynil.svg';
+import Record from './img/record.svg';
 
 class App extends React.Component {
 
@@ -14,11 +16,25 @@ class App extends React.Component {
       devicename: null,
       deviceactive: false,
       userID: null,
-      getUserToggled: false,
+      getUserToggled: false
     };
   };
 
   componentDidMount(){
+    if(this.state.userID === null)
+        {
+            console.log("Requesting client id...");
+            fetch("/authorize")
+            .then(res => res.json()
+            .then(res => {
+                console.log("Fetched client ID:", res.userid);
+                this.setState({userid: res.userid});
+                console.log("client id:", this.state.userid);
+                this.getID(res.userid);
+            }));
+    }
+    
+    console.log("entra");
     if(this.state.loggedin !== true)
     {
       console.log("fetching getUser...");
@@ -55,7 +71,8 @@ class App extends React.Component {
 
   componentDidUpdate(){
 
-    if(this.state.getUserToggled ===  true)
+
+    if(this.state.getUserToggled)
     {
       setTimeout( () => {
         
@@ -127,14 +144,44 @@ class App extends React.Component {
   {  
     return (
       <div className="App">
-
-          <TopHeader user={this.state.userState} getID={this.getID} devicename={this.state.devicename} deviceactive={this.state.deviceactive}/>
-        <div className="container-fluid">  
-          <Dashboard user={this.state.userState} deviceID={this.state.deviceID} userid={this.state.userID}/>
-        </div>
-        
-        
-
+        {this.state.loggedin
+                  ? <div><TopHeader user={this.state.userState} getID={this.getID} devicename={this.state.devicename} deviceactive={this.state.deviceactive}/>
+                      <div className="container-fluid">  
+                        <Dashboard user={this.state.userState} deviceID={this.state.deviceID} userid={this.state.userID}/>
+                      </div>
+                      </div>
+                  : <div className="Plus">
+                    <header className="App-header">
+                      <button className="Home">
+                      </button>
+                      <div className="">
+                        <a className="Login" href={`/login/${this.state.userID}`}>
+                          Log In
+                        </a>
+                        <a href="https://www.spotify.com/us/" className="Register">
+                          Register Now!
+                        </a>
+                      </div>
+                    </header>
+                    <div className="MiddleTitle">
+                      <h2 className="Black">Be the life of the party!</h2>
+                      <h1 className="Title">SHARING MUSIC</h1>
+                      <h1 className="Title">NEVER FELT SO <span className="Outline">GOOD</span></h1>
+                      <img alt="Vynil" src={Vynil} className="Vynil"/>
+                      <img alt="Record" src={Record} className="Record"/>
+                      <button className="Button">
+                      <svg><g><line x2="227.62" y1="31.28" y2="31.28"></line><polyline points="222.62 25.78 228.12 31.28 222.62 36.78"></polyline><circle cx="224.67" cy="30.94" r="30.5" transform="rotate(180 224.67 30.94) scale(1, -1) translate(0, -61)"></circle></g>
+                      </svg><font>Enter the Sound</font></button>
+                    </div>
+                    <footer className="Foot">
+                      <p className="Copyright">&#xA9; Antoine & Juan</p>
+                      <button className="About">
+                      ABOUT
+                      </button>
+                    </footer>
+                 </div>
+        }
+          
       </div>
     );
   }

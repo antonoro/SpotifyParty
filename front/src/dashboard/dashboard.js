@@ -249,20 +249,20 @@ class Dashboard extends React.Component{
         
         return (
             <div id="mainrow" className="row">    
-                <div id="mygroups" className="col-2 border-right border-top">
-                    <div className="row justify-content-center">
-                        <h2>My groups</h2>
+                <div id="mygroups" className="col-2 ">
+                    <div className="row justify-content-center groupR">
+                        <h2 className="titleGroup">My groups</h2>
                         <MyGroups userid={this.state.userID} user={this.state.user} getplaylist={this.getSelectedPlaylist} getGroup={this.getSelectedGroup} selectedGroup={this.state.group} playlistToMyGroups={this.state.playlistToMyGroups}/>
                     </div>
                     
                 </div>
                 <div className="col-7">
-                    <div className="row nowplaying border-bottom border-top">
+                    <div className="row nowplaying ">
                         <div className="col-6">
                             { (this.state.item === null || this.state.item === undefined) ?
                                 <div>    
-                                    <h2>Now Playing: [Nothing is playing]</h2>
-                                    <button className="btn btn-warning" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
+                                    <h2 className="nowP">Now Playing: [Nothing is playing]</h2>
+                                    <button className="btn btn-warning res" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
                                     { this.state.playlistDisplay !== null ?
                                         <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTriggerNext: true})}>Play Next</button>
                                     :
@@ -277,16 +277,16 @@ class Dashboard extends React.Component{
                                     <h6>Artist: {this.state.item.artists[0].name}</h6>
                                     <h6>Album: {this.state.item.album.name}</h6>
                                     
-                                    <button className="btn btn-warning" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
+                                    <button className="btn btn-warning res" onClick={() => this.setState({refreshToggled: true})}>Refresh</button>
                                     { this.state.playback ?
-                                        <button className="btn btn-danger" onClick={() => this.setState({playbackCommandtrigger: true, playback: false})}>Pause</button>
+                                        <button className="btn btn-danger res" onClick={() => this.setState({playbackCommandtrigger: true, playback: false})}>Pause</button>
                                     :
-                                        <button className="btn btn-success" onClick={() => this.setState({playbackCommandtrigger: true, playback: true})}>Play</button>
+                                        <button className="btn btn-success res" onClick={() => this.setState({playbackCommandtrigger: true, playback: true})}>Play</button>
                                     }
                                     { this.state.playlistDisplay !== null && this.state.iteratorPlaylist < this.state.playlistDisplay.tracklist.length ?
-                                        <button className="btn btn-primary" onClick={() => this.setState({changePlaybackTriggerNext: true})}>Next</button>
+                                        <button className="btn btn-primary res" onClick={() => this.setState({changePlaybackTriggerNext: true})}>Next</button>
                                     :
-                                        <button className="btn btn-primary" disabled>Next</button>
+                                        <button className="btn btn-primary res" disabled>Next</button>
                                     }
                                     
                                 </div>
@@ -310,8 +310,8 @@ class Dashboard extends React.Component{
                     </div>
                     
                 </div>
-                <div id="chat" className="col-3 border-left border-top">
-                    <h2>Chat</h2>
+                <div id="chat" className="col-3 ">
+                    <h2 className="chat">Chat</h2>
                 </div>
             </div>
         );

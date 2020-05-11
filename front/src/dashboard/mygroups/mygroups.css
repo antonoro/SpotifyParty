@@ -1,10 +1,12 @@
 #addGroupBtn {
     margin-top: 2em;
     margin-bottom: 2em;
+    color: white;
 }
 
 .fullsize {
-    width:100%
+    width:100%;
+
 }
 
 #fixedspacing {
@@ -14,4 +16,7 @@
 
 .btnAddPlaylist {
     margin-top: 1em;
+    background-color: #3B25F5;
+    color: white;
+    font-family: 'Gotham-Book';
 }
