@@ -11,8 +11,9 @@ function Chat(props) {
     const [err, setErr] = useState(null); 
     
     const setupWS = (group) => {
-        var chatSocket = new WebSocket("ws://thespotifyparty.herokuapp.com");
-
+        var HOST = window.location.origin.replace(/^http/, 'ws');
+        var chatSocket = new WebSocket(HOST);
+        console.log("Host is", HOST);
         chatSocket.onopen = () => {
             console.log("WS client connected");
 
