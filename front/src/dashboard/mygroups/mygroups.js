@@ -21,7 +21,7 @@ class MyGroups extends React.Component{
             updatedPlaylist: null,
         }
     }
-
+//laupardo: hay que revisar la lógica del componentDidUpdate. Cuando se agrega una nieva playlist no la está mostrando.
     componentDidUpdate(){
         if(this.props.user !== this.state.user && this.props.user !== '' && this.state.userID !== this.props.userid) // when user changes
         {
