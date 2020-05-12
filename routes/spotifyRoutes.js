@@ -19,7 +19,7 @@ var usersNumber = 0;
 var tokens = [];
 
 const scopes = ["user-read-currently-playing", "user-read-playback-state", "user-modify-playback-state", "user-read-email", "streaming"];
-
+//laupardo: cuando se hace reload, de la página se sale del usuario y toca volver a loggearse. Podrían implementar manejo de sesión donde esto no pase. 
 router.get('/authorize', (req, res) => {
     console.log("Login request, sending client id");
     var sentID = usersNumber + 1;
