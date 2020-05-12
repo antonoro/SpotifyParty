@@ -1,3 +1,4 @@
+//se podria modularizar un poco mas el manejo de la base de datos para que sea mas escalable y yacil de revisar y corregir
 const MongoClient = require("mongodb").MongoClient;
 
 const dotenv = require('dotenv').config();
