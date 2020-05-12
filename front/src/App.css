@@ -36,6 +36,8 @@
  min-height: 100vh;
 }
 
+//laupardo: La paleta de colores tiene un alto nivel de contraste
+
 .Home{
   background-image: url("./img/logoW.svg");
   background-repeat: no-repeat;
@@ -166,7 +168,7 @@
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } } 
 
-
+//laupardo: Los botones podrían tener más espacio entre ellos y adicionalmente formas que ayuden a identificar cual es pausa, play etc. 
 
 .Button {
   top:-120px;
