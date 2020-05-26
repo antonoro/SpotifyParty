@@ -3,7 +3,7 @@ import { Navbar, Button, Form, FormControl, NavDropdown, Nav } from 'react-boots
 import './topheader.css';
 import hash from "../hash";
 import * as $ from "jquery";
-import logo from './img/logoW.svg'
+import logo from './img/record.svg'
 
 
 const authEndpoint = "https://accounts.spotify.com/authorize";

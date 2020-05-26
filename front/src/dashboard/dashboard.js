@@ -233,7 +233,7 @@ class Dashboard extends React.Component{
 
     getSelectedPlaylist = (playlist, group) => {
         console.log("Got selected playlist in dashboard: ", `${playlist.tracklist} from group: ${group}`);
-        this.setState({playlistDisplay: playlist, iteratorPlaylist: 0, group: group});
+        this.setState({playlistDisplay: playlist, iteratorPlaylist: 0});
     }
 
     getSelectedGroup = (group) => {

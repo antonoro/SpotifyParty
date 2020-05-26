@@ -82,7 +82,11 @@ class MyGroups extends React.Component{
     handleSelectedPlaylist = (val) => {
         console.log("Selected playlist in MyGroups: ", `${val[0].name} from group: ${val[1]}`);
         this.props.getplaylist(val[0], val[1]);
-        //this.props.getGroup(val[1]);
+    }
+
+    handleSelectedGroup = (val) => {
+        console.log("Active group is: ", val.target.getAttribute("value") );
+        this.props.getGroup(val.target.getAttribute("value"));
     }
 
     handleInputChange = (event) => {
@@ -177,15 +181,16 @@ class MyGroups extends React.Component{
                                     {
                                         return (
                                         <Card>
-                                            <Accordion.Toggle as={Card.Header} eventKey={index}>
+                                            <Accordion.Toggle as={Card.Header} onClick={this.handleSelectedGroup} value={group.groupname} eventKey={index}>
                                                 {group.groupname}
                                             </Accordion.Toggle>
                                             <Accordion.Collapse eventKey={index}>
                                                 <Card.Body>
                                                     <h4>Members</h4>
-                                                    <ul>
+                                                    <ul id="MemberList">
                                                         {group.members.map((member, i) => {
-                                                            return(<h6>{member}</h6>)
+                                                            var displayName = member.split("@")[0];
+                                                            return(<h6>{displayName}</h6>)
                                                             })
                                                         }
                                                     </ul>
