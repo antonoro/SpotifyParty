@@ -70,7 +70,7 @@ yarn start
 
 Navigate to localhost:3001 and enjoy our app!
 
-IMPORTANT NOTICE: This app is only a Spotify assitant. It won't play music, only control your listening device. You'll need to have a spotify web session opened to enjoy your party (open.spotify.com).
+IMPORTANT NOTICE: This app is only a Spotify assistant. It won't play music, only control your listening device. You'll need to have a spotify web session opened to enjoy your party (open.spotify.com).
 
 ## 3: Authors
 
