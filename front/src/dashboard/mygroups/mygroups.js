@@ -59,8 +59,9 @@ class MyGroups extends React.Component{
             });
         }    
 
-        if(this.state.loggedIn === true && this.state.getgroups === true)
+        if(this.state.loggedIn === true && this.state.getgroups === true && this.state.groups === null)
         {
+            console.log("Actual groups are:", this.state.groups);
             this.getAllgroups();
         }
     }

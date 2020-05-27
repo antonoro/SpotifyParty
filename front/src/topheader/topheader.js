@@ -33,18 +33,18 @@ class TopHeader extends React.Component{
     }
 
     componentDidMount() {
-        if(this.state.userid === null)
-        {
-            console.log("Requesting client id...");
-            fetch("/authorize")
-            .then(res => res.json()
-            .then(res => {
-                console.log("Fetched client ID:", res.userid);
-                this.setState({userid: res.userid});
-                console.log("client id:", this.state.userid);
-                this.props.getID(res.userid);
-            }));
-        }
+        // if(this.state.userid === null)
+        // {
+        //     console.log("Requesting client id...");
+        //     fetch("/authorize")
+        //     .then(res => res.json()
+        //     .then(res => {
+        //         console.log("Fetched client ID:", res.userid);
+        //         this.setState({userid: res.userid});
+        //         console.log("client id:", this.state.userid);
+        //         this.props.getID(res.userid);
+        //     }));
+        // }
         
     }
 
@@ -58,6 +58,10 @@ class TopHeader extends React.Component{
             this.setState({devicename: this.props.devicename, deviceactive: `${this.props.deviceactive}`})
         }
         
+    }
+
+    handleScanDeviceClick = () => {
+        this.props.getDevicesID();
     }
 
     render(){
@@ -79,8 +83,13 @@ class TopHeader extends React.Component{
                         <NavDropdown alignRight className="myaccountTag" title="My Account" id="dropdown-menu-align-right">
 
                             <NavDropdown.Item className="white">Hello, {this.state.user}</NavDropdown.Item>
-
-                            <NavDropdown.Item className="white">Device name: {this.state.devicename}</NavDropdown.Item>
+                            { this.state.devicename === null ? 
+                                <div className="text-center"><NavDropdown.Item className="white">Device name: [No active device]</NavDropdown.Item>
+                                <button onClick={this.handleScanDeviceClick} className="btn btn-success ">Scan devices</button></div>
+                            :
+                                <NavDropdown.Item className="white">Device name: {this.state.devicename}</NavDropdown.Item>
+                            }
+                            
                             <NavDropdown.Divider />
                             <NavDropdown.Item className="white" href="/">Log out</NavDropdown.Item>
                         </NavDropdown>

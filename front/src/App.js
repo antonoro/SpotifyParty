@@ -16,20 +16,21 @@ class App extends React.Component {
       devicename: null,
       deviceactive: false,
       userID: null,
+      LandinguserID: null,
       getUserToggled: false
     };
   };
 
   componentDidMount(){
+
     if(this.state.userID === null)
         {
             console.log("Requesting client id...");
             fetch("/authorize")
             .then(res => res.json()
             .then(res => {
-                console.log("Fetched client ID:", res.userid);
-                this.setState({userid: res.userid});
-                console.log("client id:", this.state.userid);
+                this.setState({userID: res.userid});
+                console.log("Landing on page with id:", this.state.userID);
                 this.getID(res.userid);
             }));
     }
@@ -111,6 +112,7 @@ class App extends React.Component {
 
     if(this.state.deviceID === null && this.state.loggedin ===  true)
     {
+      console.log("user id:", this.state.userID);
       console.log("Device id:", this.state.deviceid);
       console.log("Logged in:", this.state.loggedin);
       fetch("/mydevices", {
@@ -136,6 +138,27 @@ class App extends React.Component {
     }
   }
 
+  getDeviceID = () => {
+    console.log("Get DeviceID requested");
+    fetch("/mydevices", {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({userid: this.state.userID}),
+    })
+    .then(res => res.json()
+    .then(res => {
+      if(res.length === 0)
+      {
+        alert("No active computer devices");
+      }
+      else{
+        console.log("Devices found: ", res);
+        
+      }
+      
+    }));
+  }
+
   getID = (id) =>{
     this.setState({userID: id});
     console.log("App got client id:", this.state.userID);
@@ -146,7 +169,7 @@ class App extends React.Component {
     return (
       <div className="App">
         {this.state.loggedin
-                  ? <div><TopHeader user={this.state.userState} getID={this.getID} devicename={this.state.devicename} deviceactive={this.state.deviceactive}/>
+                  ? <div><TopHeader user={this.state.userState} getID={this.getID} devicename={this.state.devicename} deviceactive={this.state.deviceactive} getDevicesID={this.getDeviceID}/>
                       <div className="container-fluid">  
                         <Dashboard user={this.state.userState} deviceID={this.state.deviceID} userid={this.state.userID}/>
                       </div>

@@ -27,6 +27,12 @@ router.get('/authorize', (req, res) => {
     res.json({userid: sentID});
 })
 
+process.on('unhandledRejection', (reason, promise) => {
+    console.log("Reason:", reason);
+    console.log("Promise:", promise);
+
+});
+
 //Login endpoint
 router.get('/login/:userid', (req, res) => {
     
@@ -97,7 +103,7 @@ router.post('/getUser', (req,res) => {
 
 router.post('/mydevices', (req, res) => {
     var userID = req.body.userid;
-    console.log("Get devices received");
+    console.log("Get devices received from id", userID);
     var loggedinspotifyAPI = new SpotifyWebAPI({
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
@@ -110,6 +116,7 @@ router.post('/mydevices', (req, res) => {
             loggedinspotifyAPI.setRefreshToken(element[2]);
         }
     });
+
     loggedinspotifyAPI.getMyDevices()
     .then(data => {
         var devicesArray = data.body.devices;
@@ -122,8 +129,17 @@ router.post('/mydevices', (req, res) => {
             }
         })
         console.log("Computer devices: ", devices);
-        res.json(devices);
+        if(devices[0] === null){
+            res.json(null);
+        }
+        else{
+            res.json(devices);
+        }
+    }).catch(err => {
+        console.log("Error getting devices:", err);
     });
+    
+  
 });
 
 router.post('/getplayback', (req, res) => {
@@ -136,10 +152,10 @@ router.post('/getplayback', (req, res) => {
     });
     console.log("User id:", userID);
     tokens.map((element, index) => {
-        console.log(element[0])
-        if(element[0] + 1 === userID)
+        console.log("Looking in tokens for:", element[0]);
+        if(element[0] === userID)
         {
-            console.log("Found element:", element[0]+1);
+            console.log("Found element:", element[0]);
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);
         }
@@ -153,6 +169,9 @@ router.post('/getplayback', (req, res) => {
         }
         
         res.json(data.body);
+    })
+    .catch(err => {
+        console.log("Error getting playback:", err);
     });
     
 });
@@ -223,7 +242,7 @@ router.post('/play', (req,res) =>{
         redirectUri: process.env.REDIRECT_URI
     });
     tokens.map((element, index) => {
-        if(element[0]+1 === userID)
+        if(element[0] === userID)
         {
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);
@@ -253,7 +272,7 @@ router.post('/pause', (req,res) =>{
         redirectUri: process.env.REDIRECT_URI
     });
     tokens.map((element, index) => {
-        if(element[0]+1 === userID)
+        if(element[0] === userID)
         {
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);
@@ -284,7 +303,7 @@ router.post('/playsong', (req,res) =>{
         redirectUri: process.env.REDIRECT_URI
     });
     tokens.map((element, index) => {
-        if(element[0]+1 === userID)
+        if(element[0] === userID)
         {
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);
@@ -315,7 +334,7 @@ router.post('/gettracksinfo', (req, res) =>{
         redirectUri: process.env.REDIRECT_URI
     });
     tokens.map((element, index) => {
-        if(element[0]+1 === userID)
+        if(element[0] === userID)
         {
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);
@@ -358,7 +377,7 @@ router.get('/refreshaccesstoken', (req,res) =>{
 });
 
 router.post('/getallgroups', (req,res) =>{
-    console.log("Getting group info...");
+    console.log("Getting group info for id...", req.body.userid);
     var userID = req.body.userid;
     var loggedinspotifyAPI = new SpotifyWebAPI({
         clientId: process.env.CLIENT_ID,
@@ -366,13 +385,16 @@ router.post('/getallgroups', (req,res) =>{
         redirectUri: process.env.REDIRECT_URI
     });
     tokens.map((element, index) => {
-        if(element[0]+1 === userID)
+        if(element[0] === userID)
         {
+            console.log("found token for id:", element[0]);
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);
         }
     });
+    
     loggedinspotifyAPI.getMe()
+    
     .then(data => {
         if(data.statusCode === 200)
         {
@@ -385,7 +407,10 @@ router.post('/getallgroups', (req,res) =>{
         else{
             res.json(null);
         }
+    }).catch(err => {
+        console.log("Error getting groups:", err);
     });   
+    
     
 });
 
@@ -407,7 +432,7 @@ router.post('/creategroup', (req,res) =>{
         redirectUri: process.env.REDIRECT_URI
     });
     tokens.map((element, index) => {
-        if(element[0]+1 === userID)
+        if(element[0] === userID)
         {
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);
@@ -470,7 +495,7 @@ router.post('/searchtracks', (req, res) => {
         redirectUri: process.env.REDIRECT_URI
     });
     tokens.map((element, index) => {
-        if(element[0]+1 === userID)
+        if(element[0] === userID)
         {
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);
