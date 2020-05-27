@@ -1,9 +1,10 @@
 #mygroups {
     background-color: #3D3E57;
-    min-height: 93vh;
+    height: 93vh;
     font-family: 'Gotham-Book';
     color: white;
     padding-top: 4vh;
+    overflow-y: scroll;
 }
 
 #mainrow {
@@ -23,7 +24,8 @@
 #chat {
     background-color: #2C2C3B;
     padding-top: 4vh;
-    min-height: 93vh;
+    height: 93vh;
+    overflow-y: scroll;
 }
 
 .titleGroup{

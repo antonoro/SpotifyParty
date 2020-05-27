@@ -18,6 +18,15 @@
     
 }
 
+#playlistbtns {
+    margin-bottom: 1em;
+}
+
+#groupTag {
+    background-color: #393A51;
+    border: none;
+}
+
 .btnAddPlaylist {
     margin-top: 1em;
     background-color: #3B25F5;

@@ -59,11 +59,12 @@ class MyGroups extends React.Component{
             });
         }    
 
-        if(this.state.loggedIn === true && this.state.getgroups === true && this.state.groups === null)
+        if(this.state.loggedIn === true && this.state.getgroups === true)
         {
             console.log("Actual groups are:", this.state.groups);
             this.getAllgroups();
         }
+
     }
 
     getAllgroups() {
@@ -176,13 +177,32 @@ class MyGroups extends React.Component{
                 { this.state.user !== null ?
                     <div className="fullsize">
 
+                        <Accordion>
+                            <Accordion.Toggle as={Card.Header} eventKey={1}>
+                                Create Group
+                            </Accordion.Toggle>
+                            <Accordion.Collapse eventKey={1}>
+                                <Card.Body>
+                                    <form onSubmit={this.handleAddGroupSubmit}>
+                                        <Form>
+                                            <Form.Group>
+                                            <Form.Control className="input" onChange={this.handleInputChange} name="newGroup" type="text" placeholder="Enter name" value={this.state.newGroup}/>
+                                            </Form.Group>
+                                            <Button className="btnAddPlaylist" variant="success" type="submit">
+                                                Create
+                                            </Button>
+                                        </Form>
+                                    </form>
+                                </Card.Body>
+                            </Accordion.Collapse>
+                        </Accordion>
                         { this.state.groups !== null ?
                             <Accordion defaultActiveKey="0">
                                 {   this.state.groups.map((group, index) =>
                                     {
                                         return (
                                         <Card>
-                                            <Accordion.Toggle as={Card.Header} onClick={this.handleSelectedGroup} value={group.groupname} eventKey={index}>
+                                            <Accordion.Toggle as={"button"} className="btn btn-secondary" onClick={this.handleSelectedGroup} value={group.groupname} eventKey={index}>
                                                 {group.groupname}
                                             </Accordion.Toggle>
                                             <Accordion.Collapse eventKey={index}>
@@ -225,7 +245,7 @@ class MyGroups extends React.Component{
                                                         {group.playlists.map((playlist, i) => {
                                                             return(
             
-                                                                <ToggleButton value={[this.state.groups[index].playlists[i],this.state.groups[index].groupname]} >{playlist.name}</ToggleButton>
+                                                                <ToggleButton id="playlistbtns" value={[this.state.groups[index].playlists[i],this.state.groups[index].groupname]} >{playlist.name}</ToggleButton>
                                                                 
                                                             )
                                                         })
@@ -269,26 +289,6 @@ class MyGroups extends React.Component{
                                 
                             </div>
                         }
-
-                        <Accordion>
-                            <Accordion.Toggle as={Card.Header} eventKey={1}>
-                                Create Group
-                            </Accordion.Toggle>
-                            <Accordion.Collapse eventKey={1}>
-                                <Card.Body>
-                                    <form onSubmit={this.handleAddGroupSubmit}>
-                                        <Form>
-                                            <Form.Group>
-                                            <Form.Control className="input" onChange={this.handleInputChange} name="newGroup" type="text" placeholder="Enter name" value={this.state.newGroup}/>
-                                            </Form.Group>
-                                            <Button className="btnAddPlaylist" variant="success" type="submit">
-                                                Create
-                                            </Button>
-                                        </Form>
-                                    </form>
-                                </Card.Body>
-                            </Accordion.Collapse>
-                        </Accordion>
                             
                     </div>
                     :
