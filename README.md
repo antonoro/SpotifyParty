@@ -5,41 +5,72 @@ Real-time shared music player using Spotify's API, to listen to music at the sam
 
 ## 1: Objectives and technologies used
 
-Our goal was to create a user-friendly web tool to share music and escape with friends the idea is to have a good time and share those times.
+Our goal was to create a user-friendly web tool to share music and escape this quarantine with friends : the idea is to have a good time and be part of the party from your own home.
 
 ### Technologies used
 
-This project is developed mainly using React, HTML and CSS. Node.js is used to set up the web server, MongoDB manages the data (recipes and ingredients) and Express.jswas used to set up the basis of the project. Passport.js is used to manage the authentication process, and Bootstrap provides fonts and templates for front-end cosmetics. And last the API of Spotify used in a Node.Js wrapper.
+This project is developed mainly using React, HTML and CSS. Node.js is used to set up the web server, MongoDB manages the data (recipes and ingredients) and Express.js was used to set up the basis of the project. Spotify's Web API is used to manage the authentication process, and Bootstrap provides fonts and templates for front-end cosmetics. NPM's spotify-web-api-node is used as a wrapper for all calls to Spotify Web API.
 
 ## 2: How to deploy / Prerequisites
 
 After cloning the project repository to a local folder, you'll need to install these few dependencies and softwares:
 
-- Node.js : You'll absolutely need this Javascript runtime, since everything server-side is based upon it. The Node Package Manager (npm) is very useful to include more Node modules. However, needed modules are already included in the project repo. You can find it at this link : https://nodejs.org/en/download/
+- Node.js : You'll absolutely need this Javascript runtime, since everything server-side is based upon it. The Node Package Manager (npm) or Yarn (preferred) are very useful to install Node modules. Needed modules are already included in the project repo (build) and in the package.json file. You can find and download Node.js at this link : https://nodejs.org/en/download/
 
-- MongoDB : You'll also need to install and run you own Mongo database to host your ingredient list. Using npm, adding mongodb to your project is fairly easy. This package is however already included in the node-modules folder, so you won't have to install it again. We suggest download MongoDB Compass, which provides an intuitive UI to manage database creations and content. The project expects a mongoDB database "PartyData" to be running on mongo Atlas, with two collections (groupParties and groupChats) available. 
+- MongoDB : You'll also need to install and run you own Mongo database to host your party data. Using yarn or npm, adding mongodb to your project is fairly easy. We suggest download MongoDB Compass, which provides an intuitive UI to manage database creations and content. The project expects a mongoDB database "PartyData" to be running on mongo Atlas, with two collections (groupParties and groupChats) available. 
+
+- Spotify Account: You will absolutely need a Spotify account to use our app. A link to register (sign up or log in) is provided on the landing page. Premium users have access to all features, while Free users can only listen to music chosen by their friends.
 
 You will of course need a web browser, such as Firefox, to load the front-end part of our project. Finally, to use and modify the project for personal use, you'll need a text/code editor, such as Visual Studio Code or SublimeText.  
 
 ## Steps 
-First run npm install on node.js
-Second create a .env variables you need to add the following
-CLIENT_ID Obtained from Spotify
-CLIENT_SECRET Obtained from Spotify
+
+First, run yarn install on node.js to download all dependencies.
+
+```
+yarn install
+
+```
+
+Second create a .env variable. You'll need to add the following:
+CLIENT_ID=[Obtained from Spotify]
+CLIENT_SECRET=[Obtained from Spotify]
 REDIRECT_URI=http://localhost:3001/logincallback/
-MONGO_URI Obtained from mongo Atlas
-REACT_APP_CLIENT_ID
-REACT_APP_REDIRECT_URI 
-PORT=3001
-REDIRECT_URL=3001
+MONGO_URI=[Obtained from mongo Atlas]
 
-your backend should be running on port 3001
+Your backend server should be running on port 3001, while the front end should be set on 3000.
 
-then cd Front
-Run npm install
-Change proxy to 3001 in package.json 
+Then, move to the front folder and make sure all dependencies are also installed.
 
-run both backend and front end
+```
+cd front
+yarn install
+```
+
+Change proxy to 3001 in the package.json file of the front folder and build the front project.
+
+```
+yarn build
+
+```
+
+Go back to your backend terminal (cd ..) and run the project as a whole with nodemon or node:
+
+```
+yarn start:dev
+
+```
+
+OR
+
+```
+yarn start
+
+```
+
+Navigate to localhost:3001 and enjoy our app!
+
+IMPORTANT NOTICE: This app is only a Spotify assitant. It won't play music, only control your listening device. You'll need to have a spotify web session opened to enjoy your party (open.spotify.com).
 
 ## 3: Authors
 
@@ -55,3 +86,4 @@ Antoine Noreau // https://github.com/antonoro
 
 ## 5: Licence
 
+This project is licensed under the MIT <a href="./LICENSE">License</a>.
