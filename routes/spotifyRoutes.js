@@ -80,8 +80,10 @@ router.post('/getUser', (req,res) => {
             redirectUri: process.env.REDIRECT_URI
         });
         tokens.map((element, index) => {
-            if(element[0] === userID)
+            console.log("Looking in tokens for:", element[0]);
+            if(element[0] === userID || element[0] === parseInt(userID))
             {
+                console.log("Found token for id:", element[0]);
                 loggedinspotifyAPI.setAccessToken(element[1]);
                 loggedinspotifyAPI.setRefreshToken(element[2]);
             }
@@ -110,7 +112,7 @@ router.post('/mydevices', (req, res) => {
         redirectUri: process.env.REDIRECT_URI
     });
     tokens.map((element, index) => {
-        if(element[0] === userID)
+        if(element[0] === userID || element[0] === parseInt(userID))
         {
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);
@@ -153,7 +155,7 @@ router.post('/getplayback', (req, res) => {
     console.log("User id:", userID);
     tokens.map((element, index) => {
         console.log("Looking in tokens for:", element[0]);
-        if(element[0] === userID)
+        if(element[0] === userID || element[0] === parseInt(userID))
         {
             console.log("Found element:", element[0]);
             loggedinspotifyAPI.setAccessToken(element[1]);
@@ -242,7 +244,7 @@ router.post('/play', (req,res) =>{
         redirectUri: process.env.REDIRECT_URI
     });
     tokens.map((element, index) => {
-        if(element[0] === userID)
+        if(element[0] === userID || element[0] === parseInt(userID))
         {
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);
@@ -272,7 +274,7 @@ router.post('/pause', (req,res) =>{
         redirectUri: process.env.REDIRECT_URI
     });
     tokens.map((element, index) => {
-        if(element[0] === userID)
+        if(element[0] === userID || element[0] === parseInt(userID))
         {
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);
@@ -303,7 +305,7 @@ router.post('/playsong', (req,res) =>{
         redirectUri: process.env.REDIRECT_URI
     });
     tokens.map((element, index) => {
-        if(element[0] === userID)
+        if(element[0] === userID || element[0] === parseInt(userID))
         {
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);
@@ -334,7 +336,7 @@ router.post('/gettracksinfo', (req, res) =>{
         redirectUri: process.env.REDIRECT_URI
     });
     tokens.map((element, index) => {
-        if(element[0] === userID)
+        if(element[0] === userID || element[0] === parseInt(userID))
         {
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);
@@ -385,7 +387,7 @@ router.post('/getallgroups', (req,res) =>{
         redirectUri: process.env.REDIRECT_URI
     });
     tokens.map((element, index) => {
-        if(element[0] === userID)
+        if(element[0] === userID || element[0] === parseInt(userID))
         {
             console.log("found token for id:", element[0]);
             loggedinspotifyAPI.setAccessToken(element[1]);
@@ -495,7 +497,7 @@ router.post('/searchtracks', (req, res) => {
         redirectUri: process.env.REDIRECT_URI
     });
     tokens.map((element, index) => {
-        if(element[0] === userID)
+        if(element[0] === userID || element[0] === parseInt(userID))
         {
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);

@@ -75,7 +75,7 @@ class MyGroups extends React.Component{
         })
         .then(res => res.json()
         .then(res => {
-            console.log("Res is: ", res);
+            console.log("Fetch groups : ", res);
             this.setState({groups: res, getgroups: false})
             
         }));

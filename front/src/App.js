@@ -11,6 +11,7 @@ class App extends React.Component {
     super();
     this.state = {
       loggedin: false,
+      sessionExists: false,
       userState: '',
       deviceID: null,
       devicename: null,
@@ -23,7 +24,14 @@ class App extends React.Component {
 
   componentDidMount(){
 
-    if(this.state.userID === null)
+
+    if(!this.state.sessionExists)
+    {
+      var userIDsession = sessionStorage.getItem('useridsession');
+      console.log("SESSION ID:", userIDsession);
+    }
+
+    if(this.state.userID === null && sessionStorage.getItem('useridsession') === null)
         {
             console.log("Requesting client id...");
             fetch("/authorize")
@@ -71,8 +79,20 @@ class App extends React.Component {
 
   componentDidUpdate(){
 
+    if(!this.state.sessionExists)
+    {
+      var userIDsession = sessionStorage.getItem('useridsession');
+      if(userIDsession === null)
+      {
+        console.log("No session user ID saved.");
+      }
+      else{
+        console.log("Session id saved:", userIDsession);
+        this.setState({userID: userIDsession, loggedin: true, getUserToggled: false, sessionExists: true});
+      }
+    }
 
-    if(this.state.getUserToggled && !this.state.loggedin)
+    if(this.state.getUserToggled)
     {
       setTimeout( () => {
         
@@ -91,7 +111,12 @@ class App extends React.Component {
           if(res.displayname !== this.state.userState)
           {
             console.log("Fetched!:", res.displayname);
-            this.setState({userState: res.displayname, loggedin: true, getUserToggled: false});
+            var userIDsession = sessionStorage.getItem('useridsession');
+            
+            sessionStorage.setItem('useridsession', this.state.userID);
+            
+            console.log("SESSION ID:", sessionStorage.getItem('useridsession'));
+            this.setState({userState: res.displayname, loggedin: true, getUserToggled: false, sessionExists: true});
           }
         }
         else{
