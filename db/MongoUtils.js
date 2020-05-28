@@ -63,6 +63,7 @@ function MongoUtils(){
             nowplaying: "",
             isplaying: false
         }).then(() => {
+            client.close();
             console.log("Added!");
             
         })
@@ -129,7 +130,7 @@ function MongoUtils(){
     ));
 
     mu.getGroupMessages = () => (
-        mu.connectreactive().then((client) => 
+        mu.connect().then((client) => 
             client.db(dbName)
             .collection("groupChats")
             .find({})

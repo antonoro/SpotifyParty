@@ -6,6 +6,7 @@ function Chat(props) {
 
     const [selectedGroup, setGroup] = useState( null );
     const [author, setAuthor] = useState( '' );
+    const [typedMessage, setTypedMessage] = useState( '' );
     const [messageCollection, setMessages] = useState([]);
    
     const [err, setErr] = useState(null); 
@@ -35,6 +36,7 @@ function Chat(props) {
     useEffect(() => {
         if(props.group !== '')
         {
+            // add something to delete previous socket. You don't want to open infinite websockets!
             setupWS(props.group);
             setAuthor(props.author);
             setGroup(props.group);
@@ -69,7 +71,7 @@ function Chat(props) {
         var group = event.target[0].value;
         var author = event.target[1].value;
         var writtenmessage = event.target[2].value;
-
+        setTypedMessage('');
         fetch("/sendchatmessage", 
         {
             method: 'POST',
@@ -79,6 +81,10 @@ function Chat(props) {
         .then(res => {
             console.log("Done.", res);
         }));
+    }
+
+    const handleInputChange = (event) => {
+        setTypedMessage(event.target.value);
     }
 
     return(
@@ -116,9 +122,9 @@ function Chat(props) {
                 <div className="row justify-content-center">
                     <form onSubmit={sendMessage} class="form-inline justify-content-left p-3">
                         <div class="form-group mb-2">
-                        <input className="form-control" name="group" value={selectedGroup} type="hidden"/>
-                        <input className="form-control" name="author" value={author} type="hidden"/>
-                            <input className="form-control" name="writtenMessage" type="text" placeholder="Write a message..." required/>
+                            <input className="form-control" name="group" value={selectedGroup} type="hidden"/>
+                            <input className="form-control" name="author" value={author} type="hidden"/>
+                            <input onChange={handleInputChange} value={typedMessage} className="form-control" name="writtenMessage" type="text" placeholder="Write a message..."/>
                         </div>
                         <button className="btn btn-success mb-2" type="submit">Send</button>
                     </form>

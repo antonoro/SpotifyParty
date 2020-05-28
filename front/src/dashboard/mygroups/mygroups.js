@@ -132,19 +132,10 @@ class MyGroups extends React.Component{
             .then(resp => {
                 if(resp !== null)
                 {
-                    fetch('/creategroupmessages', 
-                    {
-                        method: 'POST', 
-                        body: JSON.stringify({group: `${newArchivegroup}`}),
-                        headers: { 'Content-Type': 'application/json' },
-                    }).then(res => res.json())
-                    .then(resp => {
-                        if(resp !== null)
-                        {
-                            this.setState({newGroup: '', getgroups: true});
-                            console.log("Group chatarchive created");
-                        }
-                    })
+                    setTimeout( () => {
+                        this.setState({newGroup: '', getgroups: true});
+                    }, 1000);
+                    console.log("Group and chat archive created");
                 }
             });
         }

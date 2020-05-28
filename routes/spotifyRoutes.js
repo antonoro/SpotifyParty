@@ -344,18 +344,23 @@ router.post('/playsong', (req,res) =>{
             loggedinspotifyAPI.setRefreshToken(element[2]);
         }
     });
-    loggedinspotifyAPI.play({uris: [`${uri}`], device_id: `${deviceID}`})
-    .then((data) => {
-        if(data.statusCode === 204){
-            console.log("Song playing");
-            res.json("Play");
-        }
-        else{
-            res.json(null);
-        }
+    if(req.body.uri !== '')
+    {
+        loggedinspotifyAPI.play({uris: [`${uri}`], device_id: `${deviceID}`})
+        .then((data) => {
+            if(data.statusCode === 204){
+                console.log("Song playing");
+                res.json("Play");
+            }
+            else{
+                res.json(null);
+            }
 
-    }).catch(err => {console.log(err)});
-        
+        }).catch(err => {console.log(err)});
+    }
+    else{
+        res.json(null);
+    }
     
 });
 
@@ -480,7 +485,11 @@ router.post('/creategroup', (req,res) =>{
             console.log("New group: ", req.body.newgroup);
             mu.insertNewGroup(req.body.newgroup, myemail)
             .then(() => {
-                res.json("Done!");
+                console.log("Creating group chat archive", req.body.newgroup);
+                mu.createGroupMessages(req.body.newgroup)
+                .then(() => {
+                    res.json('Done: group and group chat');
+                })
             });
         }
         else{
@@ -569,13 +578,5 @@ router.post('/sendchatmessage', (req, res) => {
     } 
     );
 });
-
-router.post('/creategroupmessages', (req, res) => {
-    console.log("Creating group chat archive", req.body.group);
-    mu.createGroupMessages(req.body.group)
-    .then(() => {
-        res.json('Done');
-    })
-})
 
 module.exports = router;
