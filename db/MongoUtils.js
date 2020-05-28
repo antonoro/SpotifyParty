@@ -30,6 +30,27 @@ function MongoUtils(){
         }
     ));
 
+    mu.getPlayNowNextUp = (group) => mu.connect().then(client => (
+        client.db(dbName)
+        .collection(GroupColl)
+        .findOne({groupname: `${group}`})
+        .then((groupData) => {
+            console.log("Found group:", groupData);
+            client.close();
+            return groupData;
+        })
+    ));
+
+    mu.updatePlayNowNextUp = (playnow, nextup, group) => mu.connect().then(client => (
+        client.db(dbName)
+        .collection(GroupColl)
+        .updateOne({groupname: `${group}`}, { $set: {nowplaying: `${playnow}`}})
+        .then(() => {
+            console.log("Updated nowplaying nextup!");
+            client.close();
+        })
+    ));
+
     mu.insertNewGroup = (group, myemail) => mu.connect().then(client => (
         // Add implementation to verify if name is already used
         client.db(dbName)
@@ -39,7 +60,8 @@ function MongoUtils(){
             playlists: [],
             members: [`${myemail}`],
             nextup: "",
-            nowplaying: ""
+            nowplaying: "",
+            isplaying: false
         }).then(() => {
             console.log("Added!");
             

@@ -18,11 +18,12 @@
 .topheader {
   	font-family: 'Gotham-Book';
   	color: white;
-    background-color: #37384D;
+	background-color: #37384D;
+	max-height: 10vh;
 }
 
 .logo{
-	height: 8vh;
+	max-height: 8vh;
 }
 
 .unique{

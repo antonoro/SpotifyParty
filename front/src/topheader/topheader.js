@@ -33,18 +33,7 @@ class TopHeader extends React.Component{
     }
 
     componentDidMount() {
-        // if(this.state.userid === null)
-        // {
-        //     console.log("Requesting client id...");
-        //     fetch("/authorize")
-        //     .then(res => res.json()
-        //     .then(res => {
-        //         console.log("Fetched client ID:", res.userid);
-        //         this.setState({userid: res.userid});
-        //         console.log("client id:", this.state.userid);
-        //         this.props.getID(res.userid);
-        //     }));
-        // }
+        
         
     }
 
@@ -62,6 +51,10 @@ class TopHeader extends React.Component{
 
     handleScanDeviceClick = () => {
         this.props.getDevicesID();
+    }
+
+    toggleLogOut = () => {
+        sessionStorage.removeItem('useridsession');
     }
 
     render(){
@@ -91,7 +84,7 @@ class TopHeader extends React.Component{
                             }
                             
                             <NavDropdown.Divider />
-                            <NavDropdown.Item className="white" href="/">Log out</NavDropdown.Item>
+                            <NavDropdown.Item className="white" onClick={this.toggleLogOut} href="/">Log out</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                     } 

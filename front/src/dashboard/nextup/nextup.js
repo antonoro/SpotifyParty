@@ -129,7 +129,7 @@ class Nextup extends React.Component{
             <div className="row nextupAddsong" style={{}}>
                 <div className="col-6">
                 { this.state.playlist !== null ?
-                    <div className="nextup">
+                    <div className="nextupSection">
                         <h3 className="bigF">Next up: {this.state.tracklist[this.state.nextup][0]} - {this.state.tracklist[this.state.nextup][1]}</h3>
                         <label>Playlist name: {this.state.playlistname} Group: {this.state.group}</label>
                         <Table striped border>
@@ -159,7 +159,7 @@ class Nextup extends React.Component{
                     <h2 className="nextup">[No playlist selected]</h2>
                 }
                 </div>
-                <div className="col-6">
+                <div className="col-6 nextupSection">
                     <h2 div className="nextup">Add song to playlist</h2>
                     { this.state.playlist !== null ?
                     <div>

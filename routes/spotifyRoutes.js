@@ -144,8 +144,41 @@ router.post('/mydevices', (req, res) => {
   
 });
 
+router.post('/getgroupplaying', (req, res) => {
+    console.log("GetGroupPlaying received from:", req.body.userid);
+    console.log("Fetching from group:", req.body.requestedGroup);
+    var userID = req.body.userid;
+    var group = req.body.requestedGroup;
+
+    mu.getPlayNowNextUp(group)
+    .then(groupdata =>{
+        if(groupdata !== null)
+        {
+            res.json({playnow: groupdata.nowplaying, nextup: groupdata.nextup, isplaying: groupdata.isplaying});
+        }
+        else{
+            res.json(null);
+        }
+    });
+      
+});
+
+router.post('/setgroupplaying', (req, res) => {
+    console.log("SetGroupPlaying received with uri:", req.body.uri);
+    console.log("Fetching from group:", req.body.requestedGroup);
+    var uri = req.body.uri;
+    var group = req.body.requestedGroup;
+
+    mu.updatePlayNowNextUp(uri, null, group)
+    .then(() =>{
+        console.log("Added playnow to group:");
+        res.json({success: true});
+    });
+      
+});
+
 router.post('/getplayback', (req, res) => {
-    console.log("GetPlayback received");
+    console.log("GetPlayback received from", req.body.userid);
     var userID = req.body.userid;
     var loggedinspotifyAPI = new SpotifyWebAPI({
         clientId: process.env.CLIENT_ID,
@@ -396,7 +429,6 @@ router.post('/getallgroups', (req,res) =>{
     });
     
     loggedinspotifyAPI.getMe()
-    
     .then(data => {
         if(data.statusCode === 200)
         {

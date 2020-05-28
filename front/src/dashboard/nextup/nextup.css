@@ -15,6 +15,16 @@
     color: white !important;
 }
 
+.nextupSection {
+    padding-left: 0; 
+    padding-right: 0;
+    padding-top: 2vh;
+    height: 46vh;
+    font-family: 'GothamNarrow-Black' !important;
+    color: white !important;
+    overflow-y: scroll;
+}
+
 .bigF{
 	 font-family: 'GothamNarrow-Black'!important;
 	 color: white !important;

@@ -15,6 +15,7 @@ class Dashboard extends React.Component{
             loggedIn: false,
             item: null,
             refreshToggled: false,
+            getGroupPlayback: false,
             playbackCommandtrigger: false,
             playListCommandtrigger: false,
             changePlaybackTriggerNext: false,
@@ -67,14 +68,12 @@ class Dashboard extends React.Component{
 
         if(this.state.changePlaybackTriggerNext)
         {
-            
             var i = this.state.iteratorPlaylist;
             console.log("size:", this.state.playlistDisplay.tracklist.length);
             console.log("iterator: ", i);
             console.log('next song: ',this.state.playlistDisplay.tracklist[i]);
             
             this.playSong(this.state.playlistDisplay.tracklist[i]);
-            
         }
         if(this.state.changePlaybackTriggerPrevious)
         {   
@@ -90,6 +89,36 @@ class Dashboard extends React.Component{
             
             this.playSong(this.state.playlistDisplay.tracklist[i]);
         }
+    }
+
+    getGroupPlaying = (group) => {
+        console.log("Fetching nowplaying info...");
+        fetch("/getgroupplaying", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({userid: this.state.userID, requestedGroup: group}),
+          })
+        .then(res => res.json()
+        .then(res => {
+            console.log("Group playing data is:" , res);
+            if(res !== null && res!== undefined)
+            {
+                console.log("Fetched nowplaying:", res.playnow);
+                if(res.isplaying)
+                {
+                    this.playSong(res.playnow);
+                }
+                else{
+                    console.log("Received playnow but not playing");
+                    this.playNowSong(res.playnow);
+                    setTimeout( () => {
+                        this.playpausePlayback("pause");
+                    }, 1000); // Not good practice, should find a way to coordinate with spotify, but can't predict when it'll actually have changed the song
+                    
+                }
+            }
+        })
+        );
     }
 
     getMusicInfo = () => {
@@ -137,6 +166,41 @@ class Dashboard extends React.Component{
         
     }
 
+    playNowSong = (songuri) => {
+        fetch("/playsong", 
+        {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({uri: `${songuri}`, deviceID: `${this.state.deviceID}`, userid: this.state.userID}),
+        }).then(res => res.json()
+        .then(res => {
+            console.log(res);
+            
+            console.log("Waiting for spotify to change song...");
+            setTimeout( () => {
+            this.setState({
+                refreshToggled: true,
+                changePlaybackTriggerNext: false,
+                iteratorPlaylist: this.state.iteratorPlaylist + 1,
+            });
+            }, 1000); // Not good practice, should find a way to coordinate with spotify, but can't predict when it'll actually have changed the song   
+        }));
+    }
+
+    setPlayNowSong = (songuri) => {
+        fetch("/setgroupplaying", 
+        {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({uri: `${songuri}`, requestedGroup: `${this.state.group}`}),
+        }).then(res => res.json()
+        .then(res => {
+            console.log("response to set now playing", res);
+            console.log("Added nowplaying song to group");
+           
+        }));
+    }
+
     playSong = (songuri) => {
         fetch("/playsong", 
         {
@@ -157,6 +221,7 @@ class Dashboard extends React.Component{
                             changePlaybackTriggerNext: false,
                             iteratorPlaylist: this.state.iteratorPlaylist + 1,
                         });
+                        this.setPlayNowSong(songuri);
                     }
                     else if(this.state.changePlaybackTriggerPrevious){
                         this.setState({
@@ -239,6 +304,7 @@ class Dashboard extends React.Component{
     getSelectedGroup = (group) => {
         console.log("Got selected group in dashboard: ", group);
         this.setState({group: group});
+        this.getGroupPlaying(group);
     }
 
     addedSongtoPlaylist = (newplaylist, group) => {
