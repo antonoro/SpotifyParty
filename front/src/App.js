@@ -189,6 +189,12 @@ class App extends React.Component {
     console.log("App got client id:", this.state.userID);
   }
 
+  openSpotify = () => {
+    const url = 'https://open.spotify.com';
+    window.open(url, '_blank');
+}
+
+
   render()
   {  
     return (
@@ -204,7 +210,7 @@ class App extends React.Component {
                       <button className="Home">
                       </button>
                       <div className="">
-                        <a className="Login" href={`/login/${this.state.userID}`}>
+                        <a className="Login" onClick={this.openSpotify} href={`/login/${this.state.userID}`}>
                           Log In
                         </a>
                         <a href="https://www.spotify.com/us/" className="Register">
