@@ -87,3 +87,17 @@ Antoine Noreau // https://github.com/antonoro
 ## 5: Licence
 
 This project is licensed under the MIT <a href="./LICENSE">License</a>.
+
+## 6: Usability test
+
+We ran our app on usability tests with standard internet users (no programming experience) to understand its main flaws. Here a short resume:
+
+- Add play button on each song in playlist. It's unclear how to get the playlist to actually play.
+
+- Next song button should be place elsewhere or labelled differently.
+
+- Add song to playlist feature should be shown on a pop up. It's unclear what it used for when there is no loaded playlist.
+
+- General UI is too loaded.
+
+- Add a step by step or basic instructions when loading the app (and no groups are loaded).

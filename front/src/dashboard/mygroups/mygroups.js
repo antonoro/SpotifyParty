@@ -132,7 +132,6 @@ class MyGroups extends React.Component{
             .then(resp => {
                 if(resp !== null)
                 {
-                    this.setState({newGroup: '', getgroups: true});
                     fetch('/creategroupmessages', 
                     {
                         method: 'POST', 
@@ -142,6 +141,7 @@ class MyGroups extends React.Component{
                     .then(resp => {
                         if(resp !== null)
                         {
+                            this.setState({newGroup: '', getgroups: true});
                             console.log("Group chatarchive created");
                         }
                     })
