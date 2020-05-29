@@ -156,7 +156,7 @@ class Nextup extends React.Component{
                         
                     </div>
                 :
-                    <h2 className="nextup">[No playlist selected]</h2>
+                    <h2 className="nextupSection">[No playlist selected]</h2>
                 }
                 </div>
                 <div className="col-6 nextupSection">

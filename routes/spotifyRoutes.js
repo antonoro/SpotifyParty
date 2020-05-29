@@ -465,13 +465,15 @@ router.post('/createplaylist', (req,res) =>{
 
 router.post('/creategroup', (req,res) =>{
     var userID = req.body.userid;
+    console.log("New group requested: ", req.body.newgroup);
+    console.log("from id: ", req.body.userid);
     var loggedinspotifyAPI = new SpotifyWebAPI({
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
         redirectUri: process.env.REDIRECT_URI
     });
     tokens.map((element, index) => {
-        if(element[0] === userID)
+        if(element[0] === userID || element[0] === parseInt(userID))
         {
             loggedinspotifyAPI.setAccessToken(element[1]);
             loggedinspotifyAPI.setRefreshToken(element[2]);

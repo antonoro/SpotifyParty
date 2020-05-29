@@ -88,7 +88,10 @@ class MyGroups extends React.Component{
 
     handleSelectedGroup = (val) => {
         console.log("Active group is: ", val.target.getAttribute("value") );
-        this.props.getGroup(val.target.getAttribute("value"));
+        if(this.state.selectedGroup !== val.target.getAttribute("value"))
+        {
+            this.props.getGroup(val.target.getAttribute("value"));
+        }
     }
 
     handleInputChange = (event) => {

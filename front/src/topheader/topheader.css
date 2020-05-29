@@ -19,11 +19,11 @@
   	font-family: 'Gotham-Book';
   	color: white;
 	background-color: #37384D;
-	max-height: 10vh;
+	
 }
 
 .logo{
-	max-height: 8vh;
+	width: 100px;
 }
 
 .unique{
