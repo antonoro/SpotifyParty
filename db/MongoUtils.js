@@ -51,6 +51,16 @@ function MongoUtils(){
         })
     ));
 
+    mu.updateIsPlaying = ( action, group) => mu.connect().then(client => (
+        client.db(dbName)
+        .collection(GroupColl)
+        .updateOne({groupname: `${group}`}, { $set: {isplaying: action}})
+        .then((data) => {
+            console.log("Updated isplaying!", group);
+            client.close();
+        })
+    ));
+
     mu.insertNewGroup = (group, myemail) => mu.connect().then(client => (
         // Add implementation to verify if name is already used
         client.db(dbName)

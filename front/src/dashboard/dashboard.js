@@ -104,16 +104,17 @@ class Dashboard extends React.Component{
             if(res !== null && res!== undefined)
             {
                 console.log("Fetched nowplaying:", res.playnow);
+                console.log("isPlaying?:", res.isplaying);
                 if(res.isplaying)
                 {
-                    this.playSong(res.playnow);
+                    this.playNowSong(res.playnow);
                 }
                 else{
                     console.log("Received playnow but not playing");
                     this.playNowSong(res.playnow);
                     setTimeout( () => {
                         this.playpausePlayback("pause");
-                    }, 1000); // Not good practice, should find a way to coordinate with spotify, but can't predict when it'll actually have changed the song
+                    }, 2000); // Not good practice, should find a way to coordinate with spotify, but can't predict when it'll actually have changed the song
                     
                 }
             }
@@ -149,7 +150,7 @@ class Dashboard extends React.Component{
         fetch("/"+action, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({userid: this.state.userID}),
+            body: JSON.stringify({userid: this.state.userID, group: this.state.group}),
           })
         .then(res => res.json()
         .then(res => {
@@ -159,6 +160,7 @@ class Dashboard extends React.Component{
                 console.log("Done!: ", res);
                 this.setState({
                     playbackCommandtrigger: false,
+                    refreshToggled: true
                 });
             }
         })
@@ -171,7 +173,7 @@ class Dashboard extends React.Component{
         {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({uri: `${songuri}`, deviceID: `${this.state.deviceID}`, userid: this.state.userID}),
+            body: JSON.stringify({uri: `${songuri}`, deviceID: `${this.state.deviceID}`, userid: this.state.userID, group: this.state.group}),
         }).then(res => res.json()
         .then(res => {
             console.log(res);
@@ -183,7 +185,7 @@ class Dashboard extends React.Component{
                 changePlaybackTriggerNext: false,
                 iteratorPlaylist: this.state.iteratorPlaylist + 1,
             });
-            }, 1000); // Not good practice, should find a way to coordinate with spotify, but can't predict when it'll actually have changed the song   
+            }, 2000); // Not good practice, should find a way to coordinate with spotify, but can't predict when it'll actually have changed the song   
         }));
     }
 

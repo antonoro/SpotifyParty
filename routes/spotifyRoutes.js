@@ -271,6 +271,7 @@ router.get('/previous', (req,res) =>{
 router.post('/play', (req,res) =>{
     console.log("Play song received");
     var userID = req.body.userid;
+    var groupname = req.body.group;
     var loggedinspotifyAPI = new SpotifyWebAPI({
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
@@ -288,8 +289,12 @@ router.post('/play', (req,res) =>{
     .then(data => {
         if(data.statusCode === 204)
         {
-            console.log("Playing");
-            res.json("Play");
+            mu.updateIsPlaying( true, groupname)
+            .then((resp) => {
+                console.log("Playing");
+                res.json("Play");
+            })
+            
         }
         else{
             res.json(null);
@@ -300,7 +305,9 @@ router.post('/play', (req,res) =>{
 
 router.post('/pause', (req,res) =>{
     console.log("Pause playback received");
+    console.log("group received:", req.body.group);
     var userID = req.body.userid;
+    var groupname = req.body.group;
     var loggedinspotifyAPI = new SpotifyWebAPI({
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
@@ -317,8 +324,12 @@ router.post('/pause', (req,res) =>{
     .then((data) => {
         if(data.statusCode === 204)
         {
-        console.log("Pausing");
-        res.json("Pause");
+            mu.updateIsPlaying( false, groupname)
+            .then((resp) => {
+                console.log("Pausing");
+                res.json("Pause");
+            })
+        
         }
         else{
             res.json(null);
@@ -332,6 +343,7 @@ router.post('/playsong', (req,res) =>{
     var uri = "spotify:track:"+req.body.uri;
     var deviceID = req.body.deviceID;
     var userID = req.body.userid;
+    var groupname = req.body.group;
     var loggedinspotifyAPI = new SpotifyWebAPI({
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
@@ -349,8 +361,11 @@ router.post('/playsong', (req,res) =>{
         loggedinspotifyAPI.play({uris: [`${uri}`], device_id: `${deviceID}`})
         .then((data) => {
             if(data.statusCode === 204){
-                console.log("Song playing");
-                res.json("Play");
+                mu.updateIsPlaying( true, groupname)
+                .then((resp) => {
+                    console.log("Song playing");
+                    res.json("Play");
+            })
             }
             else{
                 res.json(null);
