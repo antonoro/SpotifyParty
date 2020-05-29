@@ -33,6 +33,9 @@ process.on('unhandledRejection', (reason, promise) => {
 
 });
 
+/* David Butista: No se si sea tan bueno mandar el userid como lo están mandando sería mejor por el body para que no salga
+en la ruta */
+
 //Login endpoint
 router.get('/login/:userid', (req, res) => {
     
