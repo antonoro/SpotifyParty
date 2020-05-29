@@ -5,6 +5,8 @@ import hash from "../hash";
 import * as $ from "jquery";
 import logo from './img/record.svg'
 
+/* David Bautista: Hola!, veo que usaron clases... podría ser mejor usando hooks no?, así mismo recuerden poner los proptypes
+para validar los tipos de datos*/
 
 const authEndpoint = "https://accounts.spotify.com/authorize";
 
