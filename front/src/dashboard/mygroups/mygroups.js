@@ -178,6 +178,7 @@ class MyGroups extends React.Component{
                     <div className="fullsize">
 
                         <Accordion>
+                            //Seria bueno cambiar el estilo del boton que despliega el input para crear un grupo, ya que no parece un botom
                             <Accordion.Toggle as={Card.Header} eventKey={1}>
                                 Create Group
                             </Accordion.Toggle>
@@ -188,6 +189,7 @@ class MyGroups extends React.Component{
                                             <Form.Group>
                                             <Form.Control className="input" onChange={this.handleInputChange} name="newGroup" type="text" placeholder="Enter name" value={this.state.newGroup}/>
                                             </Form.Group>
+                                            //No me funciono el crear un grupo
                                             <Button className="btnAddPlaylist" variant="success" type="submit">
                                                 Create
                                             </Button>
