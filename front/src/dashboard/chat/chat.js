@@ -8,10 +8,12 @@ function Chat(props) {
     const [author, setAuthor] = useState( '' );
     const [typedMessage, setTypedMessage] = useState( '' );
     const [messageCollection, setMessages] = useState([]);
-   
+    const [ongoingSocket, setSocket] = useState(null);
+
     const [err, setErr] = useState(null); 
     
     const setupWS = (group) => {
+        
         var HOST = window.location.origin.replace(/^http/, 'ws');
         var chatSocket = new WebSocket(HOST);
         console.log("Host is", HOST);
@@ -31,13 +33,28 @@ function Chat(props) {
             }
         }
 
+        return chatSocket;
+
+    }
+
+    const closepreviousSockets = (socket) => {
+        if(socket !== null)
+        {
+            console.log("Socket closed:", socket);
+            socket.close();
+        }
+        else{
+            console.log("No socket to close.");
+        }
     }
 
     useEffect(() => {
         if(props.group !== '')
         {
             // add something to delete previous socket. You don't want to open infinite websockets!
-            setupWS(props.group);
+            closepreviousSockets(ongoingSocket);
+            var actualSocket = setupWS(props.group);
+            setSocket(actualSocket);
             setAuthor(props.author);
             setGroup(props.group);
             setMessages([]);
