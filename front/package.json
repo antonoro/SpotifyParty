@@ -9,7 +9,6 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "babel-jest": "^26.0.1",
     "bootstrap": "^4.4.1",
     "dotenv": "^8.2.0",
     "jquery": "^3.5.0",
@@ -23,9 +22,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test":  "jest",
+    "test": "jest",
     "eject": "react-scripts eject"
-
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -44,6 +42,5 @@
   },
   "proxy": "http://localhost:3001",
   "devDependencies": {
-    "jest": "^26.0.1"
   }
 }
